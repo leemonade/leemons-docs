@@ -18,7 +18,7 @@ No connector comes installed by default, so you need to install your favorite on
 ::: tab yarn
 
 ```bash
- yarn add leemons-connector-CONNECTOR_NAME
+yarn add leemons-connector-CONNECTOR_NAME
 ```
 
 :::
@@ -158,12 +158,12 @@ The \*many queries run in transactions, so if an entry fails, the whole query ro
 
   Once the user is created, the resulting object is resolved. If an error occurred, the promise rejects the database error.
 
-  ```js
-    leemons.query('users').create({
-      name: 'Jane',
-      email: 'JaneDoe@leemons.io'
-    });
-  ```
+```js
+leemons.query('users').create({
+  name: 'Jane',
+  email: 'JaneDoe@leemons.io'
+});
+```
 
 :::
 
@@ -175,12 +175,12 @@ The \*many queries run in transactions, so if an entry fails, the whole query ro
 
   If all the creations are done correctly, an array with all the users is resolved; if not, the promise rejects the database's accumulated errors.
 
-  ```js
-    leemons.query('users').createMany([
-      { name: 'Jane', email: 'JaneDoe@leemons.io' },
-      { name: 'John', email: 'JohnDoe@leemons.io' }
-    ]);
-  ```
+```js
+leemons.query('users').createMany([
+  { name: 'Jane', email: 'JaneDoe@leemons.io' },
+  { name: 'John', email: 'JohnDoe@leemons.io' }
+]);
+```
 
 :::
 
@@ -191,12 +191,12 @@ The \*many queries run in transactions, so if an entry fails, the whole query ro
 
   When the entry is updated, an object with the new values is resolved. If no entry matches the query or an error occurred, the promise rejects.
 
-  ```js
-    leemons.query('users').update(
-      { id: 1 },
-      { name: 'Janie' }
-    );
-  ```
+```js
+leemons.query('users').update(
+  { id: 1 },
+  { name: 'Janie' }
+);
+```
 
 :::
 
@@ -212,16 +212,16 @@ For updating multiple items, you need to provide an array with each update infor
 The update runs inside a transaction. When all the entries are updated, an array with the new values is resolved. If an error occurs, the promise rejects.
 
 ```js
-  leemons.query('users').updateMany([
-    {
-      query: { id: 1 },
-      item:  { name: 'Jane' }
-    },
-    {
-      query: { id: 2},
-      item:  { name: 'John' }
-    }
-  ]);
+leemons.query('users').updateMany([
+  {
+    query: { id: 1 },
+    item:  { name: 'Jane' }
+  },
+  {
+    query: { id: 2},
+    item:  { name: 'John' }
+  }
+]);
 ```
 
 :::
@@ -233,8 +233,8 @@ The update runs inside a transaction. When all the entries are updated, an array
 
   Once the entry is deleted, an empty object resolves. If an error occurs, the promise rejects.
 
-  ```js
-    leemons.query('users').delete({ id: 1 });
+```js
+leemons.query('users').delete({ id: 1 });
 ```
 
 :::
@@ -247,9 +247,9 @@ The update runs inside a transaction. When all the entries are updated, an array
 
   The query runs inside a transaction. When all the items are deleted, an array with empty objects is resolved. If any error occurs, the promise rejects.
 
-  ```js
-    leemons.query('users').deleteMany({ name: 'Jane' });
-  ```
+```js
+leemons.query('users').deleteMany({ name: 'Jane' });
+```
 
 :::
 
@@ -262,9 +262,9 @@ The update runs inside a transaction. When all the entries are updated, an array
 
   If an error occurs, the promise throws the error.
 
-  ```js
-    leemons.query('users').find({ name: 'Jane' });
-  ```
+```js
+leemons.query('users').find({ name: 'Jane' });
+```
 
 :::
 
@@ -273,9 +273,9 @@ The update runs inside a transaction. When all the entries are updated, an array
 
   The `findOne` query is the same as `find`, but the `$limit` [filter](#filters) is added to the query.
 
-  ```js
-    leemons.query('users').findOne({ name: 'Jane' });
-  ```
+```js
+leemons.query('users').findOne({ name: 'Jane' });
+```
 
 :::
 
@@ -304,7 +304,7 @@ The sorting is done in the database engine; this means that the resulting order 
 The `$sort` filter is a comma-separated string with different fields and order directions.
 
 ```js
-  leemons.query('users').find({ $sort: 'name:ASC, email:DESC' });
+leemons.query('users').find({ $sort: 'name:ASC, email:DESC' });
 ```
 
 :::
@@ -318,7 +318,7 @@ Sometimes you need to skip some results from the database; this is done with the
 The `$offset` filter is a numeric value, and it can also be called `$start`.
 
 ```js
-  leemons.query('users').find({ $offset: 10 });
+leemons.query('users').find({ $offset: 10 });
 ```
 
 :::
@@ -332,7 +332,7 @@ The limit is an instruction for getting a fixed number of results.
 The `$limit` filter is a numeric value.
 
 ```js
-  leemons.query('users').find({ $limit: 42 });
+leemons.query('users').find({ $limit: 42 });
 ```
 
 :::
@@ -352,21 +352,21 @@ You can use the logic filters to apply logic operators to your queries.
 You can use the `$where` filter to apply the [comparison filters](#comparison); this is useful for grouping the filters easily.
 
 ```js
-  leemons.query('users').find({
-    $where: { id: 1 }
-  });
+leemons.query('users').find({
+  $where: { id: 1 }
+});
 ```
 
 You can also use the `$where` filter to apply `AND` logic.
 
 ```js
-  // Selects all the users in second grade who are delegates
-  leemons.query('users').find({
-    $where: [
-      { course: '2' },
-      { role: 'delegate' }
-    ]
-  });
+// Selects all the users in second grade who are delegates
+leemons.query('users').find({
+  $where: [
+    { course: '2' },
+    { role: 'delegate' }
+  ]
+});
 ```
 
 :::
@@ -378,13 +378,13 @@ You can also use the `$where` filter to apply `AND` logic.
 You can use the `$or` filter for matching entries with different values.
 
 ```js
-  // Selects all the users who are delegates in second grade or teachers
-  leemons.query('users').find({
-    $or: [
-      { course: '2', role: 'delegate' },
-      { role: 'teacher' }
-    ]
-  });
+// Selects all the users who are delegates in second grade or teachers
+leemons.query('users').find({
+  $or: [
+    { course: '2', role: 'delegate' },
+    { role: 'teacher' }
+  ]
+});
 ```
 
 :::
@@ -404,7 +404,7 @@ Search for entries in the database whose field equals the desired value.
 Only specify the field and the value (e.g. `{ id: 1 }`)
 
 ```js
-  leemons.query('users').find({ id: 1, name: 'Jane' });
+leemons.query('users').find({ id: 1, name: 'Jane' });
 ```
 
 :::
@@ -418,7 +418,7 @@ You can also search for entries whose fields are different from the desired valu
 Specify the column name ending with the suffix `_$ne`.
 
 ```js
-  leemons.query('users').find({ name_$ne: 'Jane' });
+leemons.query('users').find({ name_$ne: 'Jane' });
 ```
 
 :::
@@ -432,7 +432,7 @@ Instead of using `$or`, you can use `_$in` to specify which values you are looki
 Specify the column name ending with the suffix `_$in`.
 
 ```js
-  leemons.query('users').find({ name_$in: ['Jane', 'John'] });
+leemons.query('users').find({ name_$in: ['Jane', 'John'] });
 ```
 
 :::
@@ -446,7 +446,7 @@ You can also find those entries without the values you are not looking for.
 Specify the column name ending with the suffix `_$nin`.
 
 ```js
-  leemons.query('users').find({ name_$nin: ['Jane', 'John'] });
+leemons.query('users').find({ name_$nin: ['Jane', 'John'] });
 ```
 
 :::
@@ -460,7 +460,7 @@ Search for entries containing a text without case sensitivity.
 Specify the column name ending with the suffix `_$contains`.
 
 ```js
-  leemons.query('users').find({ name_$contains: 'a' });
+leemons.query('users').find({ name_$contains: 'a' });
 ```
 
 :::
@@ -474,7 +474,7 @@ You can also search for those entries not containing the case insensitive text.
 Specify the column name ending with the suffix `_$ncontains`.
 
 ```js
-  leemons.query('users').find({ name_$ncontains: 'a' });
+leemons.query('users').find({ name_$ncontains: 'a' });
 ```
 
 :::
@@ -488,7 +488,7 @@ Search entries containing the text case sensitive.
 Specify the column name ending with the suffix `_$containss`.
 
 ```js
-  leemons.query('users').find({ name_$containss: 'S' });
+leemons.query('users').find({ name_$containss: 'S' });
 ```
 
 :::
@@ -502,7 +502,7 @@ You can also search for those entries not containing the exact text.
 Specify the column name ending with the suffix `_$ncontains`.
 
 ```js
-  leemons.query('users').find({ name_$ncontainss: 'S' });
+leemons.query('users').find({ name_$ncontainss: 'S' });
 ```
 
 :::
@@ -516,7 +516,7 @@ Search for entries whose values are lower than the desired value.
 Specify the column name ending with the suffix `_$lt`.
 
 ```js
-  leemons.query('users_grades').find({ grade_$lt: 5 });
+leemons.query('users_grades').find({ grade_$lt: 5 });
 ```
 
 :::
@@ -530,7 +530,7 @@ Search for entries whose values are lower or equal to the desired value.
 Specify the column name ending with the suffix `_$lte`.
 
 ```js
-  leemons.query('users_grades').find({ grade_$lte: 4 });
+leemons.query('users_grades').find({ grade_$lte: 4 });
 ```
 
 :::
@@ -544,7 +544,7 @@ Search for entries whose values are greater than the desired value.
 Specify the column name ending with the suffix `_$gt`.
 
 ```js
-  leemons.query('users_grades').find({ grade_$gt: 4 });
+leemons.query('users_grades').find({ grade_$gt: 4 });
 ```
 
 :::
@@ -556,7 +556,7 @@ Search for entries whose values are greater or equal to the desired value.
 Specify the column name ending with the suffix `_$gte`.
 
 ```js
-  leemons.query('users_grades').find({ grade_$lte: 5 });
+leemons.query('users_grades').find({ grade_$lte: 5 });
 ```
 
 :::
@@ -568,7 +568,7 @@ Search for entries whose values are null (true) or not (false).
 Specify the column name ending with the suffix `_$null`.
 
 ```js
-  leemons.query('users').find({ email_$null: true, phone_$null: false });
+leemons.query('users').find({ email_$null: true, phone_$null: false });
 ```
 
 :::
