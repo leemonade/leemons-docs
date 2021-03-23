@@ -4,7 +4,7 @@ const sidebar = {
   developer: [
     {
       collapsable: false,
-      sidebarDepth: 1,
+      sidebarDepth: 2,
       title: '📦 Packages',
       children: [
         ['/dev-docs/packages/leemons/', 'leemons'],
