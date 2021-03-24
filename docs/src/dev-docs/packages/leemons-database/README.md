@@ -1,0 +1,576 @@
+# leemons-database
+
+leemons-database is a package for standardizing the database-related stuff.
+
+It manages all the connections, queries, models and connects with each connector.
+
+## Connectors
+
+Connectors are those packages that transform general information into ORM-specific instructions.
+
+::: danger NAME CONVENTION
+Every connector must be named as follows: `leemons-connector-CONNECTOR_NAME`
+:::
+
+No connector comes installed by default, so you need to install your favorite one:
+
+:::: tabs type:border-card
+::: tab yarn
+
+```bash
+yarn add leemons-connector-CONNECTOR_NAME
+```
+
+:::
+::: tab npm
+
+```bash
+npm install leemons-connector-CONNECTOR_NAME
+```
+
+:::
+::::
+
+## Database Manager
+
+The Database Manager is the entry point for this package. It contains a [Connector Registry](#connector-registry) which initializes every connection.
+
+The Database Manager is also responsible for building queries and manage the different connectors.
+
+::: tip
+You can access the Database Manager through `leemons.db`
+:::
+
+## Connector Registry
+
+The connector registry is a function helper for managing all the connectors. It provides the following methods:
+
+:::: tabs
+
+::: tab load
+
+`load`
+
+Registers the different connectors that database connections uses in `connectorRegistry.connectors`.
+
+The registry imports each connector for using them when required.
+
+```js
+connectorRegistry.connectors.load();
+```
+
+::: warning REMEMBER
+You should have installed the connectors
+:::
+
+::: tab init
+`init`
+
+The registry calls every connector's initialization method and saves the resulting models in `databaseManager.models`.
+
+You can access these models through `leemons.db.models`.
+
+```js
+connectorRegistry.connectors.init();
+```
+
+:::
+::: tab getAll
+`getAll`
+
+Gets all the connectors objects (without the names)
+
+```js
+connectorRegistry.connectors.getAll();
+```
+
+:::
+
+::: tab get
+`get`
+
+Gets the specified connector object
+
+```js
+connectorRegistry.connectors.get('connector name');
+```
+
+:::
+
+::: tab getFromConnection
+`getFromConnection`
+
+Gets the connector used in the given connection
+
+```js
+connectorRegistry.connectors.getFromConnection('connection name');
+```
+
+:::
+
+::: tab default
+`default`
+
+Gets the connector used in the default connection
+
+```js
+connectorRegistry.connectors.default;
+```
+
+:::
+
+::: tab set
+`set`
+
+Sets the given value on `databaseManager.connector[provided key]`
+
+```js
+connectorRegistry.connectors.set('connector name', newValue);
+```
+
+::::
+
+## Query Builder
+
+When you try to query something from the database, it is sometimes difficult to find the desired model. With the query builder is very easy; you only need to remember the model name.
+
+::: tip INFO
+The builder search for the models in `databaseManager.models`.
+:::
+
+When you call the query builder, it gets your model and connector for generating an object with the queries. Once it's generated, it caches it for the following calls.
+
+### Queries
+
+The queries are the primary way of interacting with the database. These are standardized instructions that are interpreted by the connectors. If you need to run a custom query, you need to check how it is done with your selected connector.
+
+The provided queries may change depending on the connector, see your connector's docs, but should be as follows:
+::: tip *Many queries
+The \*many queries run in transactions, so if an entry fails, the whole query rollbacks (returns to the previous state)
+:::
+
+:::: tabs
+
+::: tab create
+  `create`
+
+  If you want to create any new entry, call this query with an object describing the new values.
+
+  Once the user is created, the resulting object is resolved. If an error occurred, the promise rejects the database error.
+
+```js
+leemons.query('users').create({
+  name: 'Jane',
+  email: 'JaneDoe@leemons.io'
+});
+```
+
+:::
+
+::: tab createMany
+
+  `createMany`
+
+  You can also create many entries in one call. The queries run inside a transaction.
+
+  If all the creations are done correctly, an array with all the users is resolved; if not, the promise rejects the database's accumulated errors.
+
+```js
+leemons.query('users').createMany([
+  { name: 'Jane', email: 'JaneDoe@leemons.io' },
+  { name: 'John', email: 'JohnDoe@leemons.io' }
+]);
+```
+
+:::
+
+::: tab update
+  `update`
+
+  For updating an item, you need to provide a [filter](#filters) for matching the entry, then describe the new item values.
+
+  When the entry is updated, an object with the new values is resolved. If no entry matches the query or an error occurred, the promise rejects.
+
+```js
+leemons.query('users').update(
+  { id: 1 },
+  { name: 'Janie' }
+);
+```
+
+:::
+
+::: tab updateMany
+
+`updateMany`
+
+For updating multiple items, you need to provide an array with each update information:
+
+* [filters](#filters) so we can update the matching entry.
+* The new item values.
+
+The update runs inside a transaction. When all the entries are updated, an array with the new values is resolved. If an error occurs, the promise rejects.
+
+```js
+leemons.query('users').updateMany([
+  {
+    query: { id: 1 },
+    item:  { name: 'Jane' }
+  },
+  {
+    query: { id: 2},
+    item:  { name: 'John' }
+  }
+]);
+```
+
+:::
+
+::: tab delete
+  `delete`
+
+  Deleting an entry is as easy as providing the necessary [filters](#filters) for matching an entry.
+
+  Once the entry is deleted, an empty object resolves. If an error occurs, the promise rejects.
+
+```js
+leemons.query('users').delete({ id: 1 });
+```
+
+:::
+
+::: tab deleteMany
+
+  `deleteMany`
+
+  You can also delete many items matching some [filters](#filters). This query is separated from `delete` to avoid unwanted data loss.
+
+  The query runs inside a transaction. When all the items are deleted, an array with empty objects is resolved. If any error occurs, the promise rejects.
+
+```js
+leemons.query('users').deleteMany({ name: 'Jane' });
+```
+
+:::
+
+::: tab find
+  `find`
+
+  When you need to get data from the database, you only have to run a find query; all we need is the [filters](#filters) you want.
+
+  When some results are found, an array with them is resolved. If there are no matching results, an empty array is returned.
+
+  If an error occurs, the promise throws the error.
+
+```js
+leemons.query('users').find({ name: 'Jane' });
+```
+
+:::
+
+::: tab findOne
+  `findOne`
+
+  The `findOne` query is the same as `find`, but the `$limit` [filter](#filters) is added to the query.
+
+```js
+leemons.query('users').findOne({ name: 'Jane' });
+```
+
+:::
+
+::::
+
+### Filters
+
+The filters are the fundamental way of selecting entries from the database. For supporting different database languages, we have abstracted some filters.
+
+The filters are divided into three groups: visualization, logic, comparison.
+
+#### Visualization
+
+With the visualization filters, you can modify how the data is represented.
+
+:::: tabs
+
+::: tab sort
+
+`sort`
+
+You can sort the outputted data in ascendant or descendant order based on different fields.
+
+The sorting is done in the database engine; this means that the resulting order may depend on the used connector or database engine.
+
+The `$sort` filter is a comma-separated string with different fields and order directions.
+
+```js
+leemons.query('users').find({ $sort: 'name:ASC, email:DESC' });
+```
+
+:::
+
+::: tab offset
+
+`offset`
+
+Sometimes you need to skip some results from the database; this is done with the offset.
+
+The `$offset` filter is a numeric value, and it can also be called `$start`.
+
+```js
+leemons.query('users').find({ $offset: 10 });
+```
+
+:::
+
+::: tab limit
+
+`limit`
+
+The limit is an instruction for getting a fixed number of results.
+
+The `$limit` filter is a numeric value.
+
+```js
+leemons.query('users').find({ $limit: 42 });
+```
+
+:::
+
+::::
+
+#### Logic
+
+You can use the logic filters to apply logic operators to your queries.
+
+:::: tabs
+
+::: tab where
+
+`where`
+
+You can use the `$where` filter to apply the [comparison filters](#comparison); this is useful for grouping the filters easily.
+
+```js
+leemons.query('users').find({
+  $where: { id: 1 }
+});
+```
+
+You can also use the `$where` filter to apply `AND` logic.
+
+```js
+// Selects all the users in second grade who are delegates
+leemons.query('users').find({
+  $where: [
+    { course: '2' },
+    { role: 'delegate' }
+  ]
+});
+```
+
+:::
+
+::: tab or
+
+`or`
+
+You can use the `$or` filter for matching entries with different values.
+
+```js
+// Selects all the users who are delegates in second grade or teachers
+leemons.query('users').find({
+  $or: [
+    { course: '2', role: 'delegate' },
+    { role: 'teacher' }
+  ]
+});
+```
+
+:::
+
+::::
+
+#### Comparison
+
+:::: tabs
+
+::: tab equals
+
+`equals`
+
+Search for entries in the database whose field equals the desired value.
+
+Only specify the field and the value (e.g. `{ id: 1 }`)
+
+```js
+leemons.query('users').find({ id: 1, name: 'Jane' });
+```
+
+:::
+
+::: tab not equals
+
+`not equals`
+
+You can also search for entries whose fields are different from the desired value.
+
+Specify the column name ending with the suffix `_$ne`.
+
+```js
+leemons.query('users').find({ name_$ne: 'Jane' });
+```
+
+:::
+
+::: tab in
+
+`in`
+
+Instead of using `$or`, you can use `_$in` to specify which values you are looking for.
+
+Specify the column name ending with the suffix `_$in`.
+
+```js
+leemons.query('users').find({ name_$in: ['Jane', 'John'] });
+```
+
+:::
+
+::: tab not in
+
+`nin`
+
+You can also find those entries without the values you are not looking for.
+
+Specify the column name ending with the suffix `_$nin`.
+
+```js
+leemons.query('users').find({ name_$nin: ['Jane', 'John'] });
+```
+
+:::
+
+::: tab contains
+
+`contains`
+
+Search for entries containing a text without case sensitivity.
+
+Specify the column name ending with the suffix `_$contains`.
+
+```js
+leemons.query('users').find({ name_$contains: 'a' });
+```
+
+:::
+
+::: tab ncontains
+
+`ncontains`
+
+You can also search for those entries not containing the case insensitive text.
+
+Specify the column name ending with the suffix `_$ncontains`.
+
+```js
+leemons.query('users').find({ name_$ncontains: 'a' });
+```
+
+:::
+
+::: tab strict contains
+
+`containss`
+
+Search entries containing the text case sensitive.
+
+Specify the column name ending with the suffix `_$containss`.
+
+```js
+leemons.query('users').find({ name_$containss: 'S' });
+```
+
+:::
+
+::: tab not strict contains
+
+`ncontainss`
+
+You can also search for those entries not containing the exact text.
+
+Specify the column name ending with the suffix `_$ncontains`.
+
+```js
+leemons.query('users').find({ name_$ncontainss: 'S' });
+```
+
+:::
+
+::: tab lower than
+
+`lower than`
+
+Search for entries whose values are lower than the desired value.
+
+Specify the column name ending with the suffix `_$lt`.
+
+```js
+leemons.query('users_grades').find({ grade_$lt: 5 });
+```
+
+:::
+
+::: tab lower than or equal
+
+`lower than or equal`
+
+Search for entries whose values are lower or equal to the desired value.
+
+Specify the column name ending with the suffix `_$lte`.
+
+```js
+leemons.query('users_grades').find({ grade_$lte: 4 });
+```
+
+:::
+
+::: tab greater than
+
+`greater than`
+
+Search for entries whose values are greater than the desired value.
+
+Specify the column name ending with the suffix `_$gt`.
+
+```js
+leemons.query('users_grades').find({ grade_$gt: 4 });
+```
+
+:::
+
+::: tab greater than or equal
+
+Search for entries whose values are greater or equal to the desired value.
+
+Specify the column name ending with the suffix `_$gte`.
+
+```js
+leemons.query('users_grades').find({ grade_$lte: 5 });
+```
+
+:::
+
+::: tab is NULL
+
+Search for entries whose values are null (true) or not (false).
+
+Specify the column name ending with the suffix `_$null`.
+
+```js
+leemons.query('users').find({ email_$null: true, phone_$null: false });
+```
+
+:::
+
+::::
