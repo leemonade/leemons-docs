@@ -226,6 +226,20 @@ leemons.query('users').updateMany([
 
 :::
 
+::: tab set
+
+`set`
+
+The set query lets you update the value of an entry if it exists; if not, it creates it.
+
+```js
+// If a user with the email 'JaneDoe@leemons.io' exists, it sets its name to 'Jane Doe'.
+// If the user does not exist, it creates a new one with the given email and name.
+leemons.query('users').set(
+  { email: 'JaneDoe@leemons.io' },
+  { name: 'Jane Doe' }
+);
+
 ::: tab delete
   `delete`
 
