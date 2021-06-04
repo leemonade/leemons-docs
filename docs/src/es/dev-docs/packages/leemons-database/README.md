@@ -312,6 +312,17 @@ leemons.query('usuarios').findOne({ nombre: 'Jane' });
 
 :::
 
+::: tab count
+`count`
+
+Devuelve el numero de elementos encontrados para los filtros aplicados.
+
+```js
+leemons.query('usuarios').count({ nombre: 'Jane' });
+```
+
+:::
+
 ::: tab transaction
 `transaction`
 
