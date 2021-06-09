@@ -55,7 +55,7 @@ Por ejemplo: En la tabla de usuarios tenemos los campos: nombre, apellidos y cur
 
 Hemos seleccionado la mayoría de tipos de datos provistos por Knex.js, tratando de conseguir el uso de los tipos de datos más eficientes, estos son los siguientes:
 
-* [string/text/richtext](https://knexjs.org/#Schema-string)
+* [string](https://knexjs.org/#Schema-string)
 
  Especifica el uso de strings de la longitud especificada (por defecto 255 caracteres).
 
@@ -66,6 +66,22 @@ Hemos seleccionado la mayoría de tipos de datos provistos por Knex.js, tratando
      "nombre": {
        "type": "string",
        "length": 255
+     }
+   }
+ }
+ ```
+
+* [text/richtext](https://knexjs.org/#Schema-text)
+
+ Especifica el uso de strings con una variable determinada por SQL, este tipo es más eficientes para textos largos  (por defecto 65535 caracteres).
+
+ ```json
+ {
+   "attributes": {
+     // El nombre es un string de hasta 255 caracteres
+     "nombre": {
+       "type": "text",
+       "textType": "text" // otros valores: "mediumtext" y "longtext"
      }
    }
  }
