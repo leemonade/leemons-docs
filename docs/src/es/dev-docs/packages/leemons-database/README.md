@@ -212,24 +212,16 @@ leemons.query('usuarios').update(
 
 `updateMany`
 
-También puedes actualizar varias entradas al mismo tiempo, para ello provee un array con la información de cada elemento a actualizar:
+También puedes actualizar varias entradas al mismo tiempo, para ello provee un filtro y los nuevos datos:
 
 * Un [Filtro](#filtros) Para seleccionar la entrada a actualizar.
-* Los nuevos valores del objeto.
+* Los nuevos valores de los objeto.
 
-La actualización sucede en una transacción, cuando todas las entradas son actualizadas, la promesa se resuelve con el array de objetos, en caso de error, la promesa es rechazada con este.
+La actualización sucede en todos los elementos a la vez, cuando se completa la consulta, la promesa se resuelve con un json que indica el número de elementos actualizados `{ count: number }`, en caso de error, la promesa es rechazada con este.
 
 ```js
-leemons.query('usuarios').updateMany([
- {
-   query: { id: 1 },
-   item:  { nombre: 'Jane' }
- },
- {
-   query: { id: 2},
-   item:  { nombre: 'John' }
- }
-]);
+// Actualiza el apellido de ambos usuarios a 'Doe'
+leemons.query('usuarios').updateMany({ id_$in: [1, 2] }, { apellido: 'Doe' });
 ```
 
 :::
@@ -276,9 +268,7 @@ Funciona exactamente igual que `delete`, excepto que se quita la protección de 
 
 Si los [filtros](#filtros) provistos seleccionan más de una entrada, todas ellas son eliminadas.
 
-Esta consulta no se ejecuta en una transacción, si no que se ejecuta en una única consulta.
-
-Una vez las entradas han sido eliminadas, la promesa es resuelta con un objeto vacío, si un error ocurre, la promesa es rechazada con este.
+Una vez las entradas han sido eliminadas, la promesa es resuelta con un objeto que indica el número de elementos eliminados `{ count: number }`, si un error ocurre, la promesa es rechazada con este.
 
 ```js
 leemons.query('usuarios').deleteMany({ nombre: 'Jane' });
