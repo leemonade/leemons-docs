@@ -175,7 +175,9 @@ Los controladores deben estar definidos en la carpeta de controladores, especifi
 
 **¿Cómo definir un endpoint?**
 
-Dentro del archivo `routes` se debe declarar un array atendiendo a la ruta, método y controlador:
+Dentro del archivo `routes` se debe declarar un array atendiendo a la ruta, método y controlador.
+
+Adicionalmente se puede especificar si se requiere estar autenticado y si se quiere que solo los usuarios que tengan ciertos permisos puedan acceder:
 
 ```json
 [
@@ -188,6 +190,13 @@ Dentro del archivo `routes` se debe declarar un array atendiendo a la ruta, mét
     "path": "/user/:id", // Recibe las peticiones del endpoint `GET /user/:id`
     "method": "GET",
     "handler": "users.userInfo" // Resuelve la petición con la función userInfo del archivo `controllers.users.js`
+  },
+  {
+    "path": "/user/:id", // Recibe las peticiones del endpoint `GET /user/:id`
+    "method": "DELETE",
+    "authenticated": true, // Solo podran acceder los usuarios que esten logados y tengan el token de autorización
+    "permissions": ["delete-users"], // Solo podran acceder los usuarios que tengan el permiso "delete-users"
+    "handler": "users.delete" // Resuelve la petición con la función userInfo del archivo `controllers.users.js`
   }
 ]
 ```
@@ -224,3 +233,46 @@ Extender el Frontend es el proceso más sencillo, pues funciona como una app de 
 Si quieres crear una nueva página, créala en `/{CARPETA_DE_FRONT}/pages/` y al iniciar la app, la página estará creada en `/{CARPETA_DE_NEXT}/pages/{NOMBRE_DEL_PLUGIN}/`.
 
 El resto de archivos créalos dentro de la carpeta `src` y podrás importarlos con: `import {} from '@{NOMBRE_DEL_PLUGIN}/{RUTA_DESDE_SRC}'`.
+
+
+
+## Proveedores
+
+Los proveedores funcionan como un plugin pero con mas limitaciones, su objetivo es extender un plugin dandole mayor funcionalidad.
+
+Los proveedores pueden ser instalados de dos formas, la primera de todas es con [NPM](npmjs.com); deben ser paquetes de NPM cuyo nombre sea `leemons-provider-{NOMBRE_DEL_PROVIDER}`. La segunda forma es creando una carpeta dentro del directorio de plugins con el nombre del mismo.
+
+Ha diferencia de los plugins un proveedor solo puede añadir como funcionalidades servicios y modelos.
+
+::: tip INFO
+Todo el código de los proveedores es ejecutado en un entorno seguro y no dispone de acceso al process.env de la aplicación, pero si al especificado en el .env del proveedor.
+
+Este archivo es ejecutado por Leemons en busca de un JSON
+:::
+
+### Configuración
+
+Los provedores dentro de su archivo de configuración necesitan un campo nuevo donde especifican que plugin tendran acceso a el (El provedor)
+
+```js
+
+module.exports = {
+  private: true,
+  pluginsCanUseMe: ['plugin-name-without-leemons-plugin-prefix']
+};
+
+``` 
+
+### Servicios
+
+Los servicios son un conjunto de funciones destinadas a extender la funcionalidad de un plugin por ejemplo:
+
+Que te crees un plugin para mandar emails y pero que necesite de un proveedor de email como nodemailer o aws.ses y para ello te creas 2 proveedores para que el usuario pueda instalar y usar el que mas le guste.
+
+Los servicios deben ser un archivo JavaScript descrito en la carpeta de servicios (por defecto `/services/`) y se almacena para usarse desde el plugin en `leemons.plugin.providers.{NOMBRE_DEL_PROVEDOR}.services.{NOMBRE_DEL_ARCHIVO}`. El contenido de este archivo es cargado en un entorno seguro (pero no se ejecuta si tu no lo haces, pudiendo exportar cualquier tipo de dato).
+
+### Modelos
+
+Un proveedor puede necesitar usar la base de datos, para ello, puede crear [modelos](), estos son JSONs o JavaScripts en la carpeta de modelos (por defecto `/models/`).
+
+Los modelos especificados, se pueden acceder mediante `leemons.query({NOMBRE_DEL_MODELO})` (Solo desde dentro del provedor).
