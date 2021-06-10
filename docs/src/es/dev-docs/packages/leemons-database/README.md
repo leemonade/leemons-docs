@@ -619,6 +619,126 @@ leemons.query('users').find({ name_$ncontainss: 'S' });
 
 :::
 
+::: tab empieza por
+
+`empieza por`
+
+Selecciona aquellos datos cuyo campo especificado empieza por el texto dado, este texto ignora las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$startsWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre comience con una a.
+leemons.query('usuarios').find({ nombre_$startsWith: 'a' });
+```
+
+:::
+
+::: tab no empieza por
+
+`no empieza por`
+
+Selecciona aquellos datos cuyo campo especificado no empiece con el texto dado, este texto ignora las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$nstartsWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre no empiecen con una a.
+leemons.query('usuarios').find({ nombre_$nstartsWith: 'a' });
+```
+
+:::
+
+::: tab empieza estrictamente por
+
+`empieza estrictamente por`
+
+Busca aquellas entradas que empiecen con el texto especificado respetando las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$startssWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre empiece por una S mayúscula.
+leemons.query('users').find({ name_$startssWith: 'S' });
+```
+
+:::
+
+::: tab no empieza estrictamente por
+
+`no empieza estrictamente por`
+
+Busca aquellas entradas que no empiece con el texto especificado respetando las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$nstartssWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre no empiece con una S mayúscula.
+leemons.query('users').find({ name_$nstartssWith: 'S' });
+```
+
+:::
+
+::: tab termina por
+
+`termina por`
+
+Selecciona aquellos datos cuyo campo especificado termine por el texto dado, este texto ignora las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$endsWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre termine con una a.
+leemons.query('usuarios').find({ nombre_$endsWith: 'a' });
+```
+
+:::
+
+::: tab no termina por
+
+`no termina por`
+
+Selecciona aquellos datos cuyo campo especificado no termine con el texto dado, este texto ignora las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$nendsWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre no termine con una a.
+leemons.query('usuarios').find({ nombre_$nendsWith: 'a' });
+```
+
+:::
+
+::: tab termina estrictamente por
+
+`termina estrictamente por`
+
+Busca aquellas entradas que terminen con el texto especificado respetando las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$endssWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre termine por una S mayúscula.
+leemons.query('users').find({ name_$endssWith: 'S' });
+```
+
+:::
+
+::: tab no termina estrictamente por
+
+`no termina estrictamente por`
+
+Busca aquellas entradas que no terminen con el texto especificado respetando las mayúsculas.
+
+Especifica el nombre de la columna con el sufijo `_$nendssWith`.
+
+```js
+// Selecciona aquellos usuarios cuyo nombre no terminen con una S mayúscula.
+leemons.query('users').find({ name_$nendssWith: 'S' });
+```
+
+:::
+
 ::: tab menor que
 
 `menor que`
