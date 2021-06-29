@@ -11,7 +11,8 @@ const sidebar = {
           ['/dev-docs/packages/leemons/', 'leemons'],
           ['/dev-docs/packages/leemons-database/', 'leemons-database'],
           ['/dev-docs/packages/leemons-connector-bookshelf/', 'leemons-connector-bookshelf'],
-          ['/dev-docs/packages/leemons-utils/', 'leemons-utils']
+          ['/dev-docs/packages/leemons-utils/', 'leemons-utils'],
+          ['dev-docs/packages/leemons-translations/', 'leemons-translations']
         ]
       }
     ]
@@ -26,7 +27,8 @@ const sidebar = {
           ['/es/dev-docs/packages/leemons/', 'leemons'],
           ['/es/dev-docs/packages/leemons-database/', 'leemons-database'],
           ['/es/dev-docs/packages/leemons-connector-bookshelf/', 'leemons-connector-bookshelf'],
-          ['/es/dev-docs/packages/leemons-utils/', 'leemons-utils']
+          ['/es/dev-docs/packages/leemons-utils/', 'leemons-utils'],
+            ['/es/dev-docs/packages/leemons-translations/', 'leemons-translations']
         ]
       }
     ]
