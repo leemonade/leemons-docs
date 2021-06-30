@@ -12,7 +12,9 @@ const sidebar = {
           ['/dev-docs/packages/leemons-database/', 'leemons-database'],
           ['/dev-docs/packages/leemons-connector-bookshelf/', 'leemons-connector-bookshelf'],
           ['/dev-docs/packages/leemons-utils/', 'leemons-utils'],
-          ['dev-docs/packages/leemons-translations/', 'leemons-translations']
+          ['/dev-docs/packages/leemons-translations/', 'leemons-translations'],
+          ['/dev-docs/packages/leemons-users/permissions/', 'Permission'],
+          ['/dev-docs/packages/leemons-users/actions/', 'Action Permission']
         ]
       }
     ]
@@ -24,11 +26,13 @@ const sidebar = {
         sidebarDepth: 2,
         title: '📦 Paquetes',
         children: [
-          ['/es/dev-docs/packages/leemons/', 'leemons'],
-          ['/es/dev-docs/packages/leemons-database/', 'leemons-database'],
-          ['/es/dev-docs/packages/leemons-connector-bookshelf/', 'leemons-connector-bookshelf'],
-          ['/es/dev-docs/packages/leemons-utils/', 'leemons-utils'],
-            ['/es/dev-docs/packages/leemons-translations/', 'leemons-translations']
+          ['/es/dev-docs/packages/leemons/', 'Leemons'],
+          ['/es/dev-docs/packages/leemons-database/', 'Base de datos'],
+          ['/es/dev-docs/packages/leemons-connector-bookshelf/', 'Connector de bookshelf'],
+          ['/es/dev-docs/packages/leemons-utils/', 'Utils'],
+          ['/es/dev-docs/packages/leemons-translations/', 'Traducciones/Multi-idioma'],
+          ['/es/dev-docs/packages/leemons-users/permissions/', 'Permisos'],
+          ['/es/dev-docs/packages/leemons-users/actions/', 'Acciones de permisos']
         ]
       }
     ]
