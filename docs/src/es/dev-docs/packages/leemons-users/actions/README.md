@@ -1,7 +1,10 @@
 # Acciones de permisos
 
-Antes de añadir permisos es necesario que existan acciones a realizar por dichos permisos,
+[permisos]: /es/dev-docs/packages/leemons-users/permissions/
+
+Antes de añadir [permisos] es necesario que existan acciones a realizar por dichos permisos,
 por ejemplo:
+
 
   El permiso ``` plugins.users.profiles ``` tienes la acciones:
     
@@ -51,6 +54,7 @@ leemons.plugins.users.services.actions
  *      count: 2,
  *      warnings: null
  * }
+ * 
  * @return { 
  *      items: [{actionName: 'update', order: 21}],
  *      count: 1,

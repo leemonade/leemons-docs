@@ -127,14 +127,14 @@ Todo se usa igual la unica diferencia es que con la ***privada*** solo tu plugin
 ::: warning ATENCIÓN
   De aquí en adelante las claves (key) tienen que seguir el siguiente formato:
 
-  plugins.(Nombre de tu plugin).(Clave que quieras especificar)
+plugins.(nombre-de-tu-plugin).(clave-que-quieras-especificar)
 :::
 
 **EJEMPLO**
 
 Si el paquete de mi plugin se llama **"leemons-plugin-users"** la clave (key) quedaria asi:
 
-plugins.users.(Clave que quieras especificar)
+plugins.users.(clave-que-quieras-especificar)
 
 plugins.users.settings
 
