@@ -32,7 +32,9 @@ const sidebar = {
           ['/es/dev-docs/packages/leemons-utils/', 'Utils'],
           ['/es/dev-docs/packages/leemons-translations/', 'Traducciones/Multi-idioma'],
           ['/es/dev-docs/packages/leemons-users/permissions/', 'Permisos'],
-          ['/es/dev-docs/packages/leemons-users/actions/', 'Acciones de permisos']
+          ['/es/dev-docs/packages/leemons-users/actions/', 'Acciones de permisos'],
+          ['/es/dev-docs/packages/leemons-users/users/', 'Usuarios'],
+          ['/es/dev-docs/packages/leemons-dataset/', 'Dataset']
         ]
       }
     ]
