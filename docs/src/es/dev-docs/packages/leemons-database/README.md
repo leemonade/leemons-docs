@@ -169,7 +169,7 @@ Crea una nueva entrada en la base de datos con el objeto provisto. Una vez el ob
 leemons.query('usuarios').create({
  nombre: 'Jane',
  email: 'janedoe@leemons.io'
-});
+}, { transacting });
 ```
 
 :::
@@ -186,7 +186,7 @@ Una vez todas las inserciones ocurren, un array con todos los objetos resuelve l
 leemons.query('usuarios').createMany([
  { nombre: 'Jane', email: 'janedoe@leemons.io' },
  { nombre: 'John', email: 'johndoe@leemons.io' }
-]);
+], { transacting });
 ```
 
 :::
@@ -202,7 +202,8 @@ Una vez la entrada ha sido actualizada, la promesa es resuelta con el objeto act
 ```js
 leemons.query('usuarios').update(
  { id: 1 },
- { nombre: 'Janie' }
+ { nombre: 'Janie' },
+ { transacting }
 );
 ```
 
@@ -221,7 +222,7 @@ La actualización sucede en todos los elementos a la vez, cuando se completa la 
 
 ```js
 // Actualiza el apellido de ambos usuarios a 'Doe'
-leemons.query('usuarios').updateMany({ id_$in: [1, 2] }, { apellido: 'Doe' });
+leemons.query('usuarios').updateMany({ id_$in: [1, 2] }, { apellido: 'Doe' }, { transacting });
 ```
 
 :::
@@ -237,15 +238,49 @@ Habrá veces en las que necesites actualizar un elemento existenteo crearlo si n
 // actualiza su nombre a 'Jane Doe'.
 
 // Si por el contrario, este no existe,
-// crea un usuario cuyo nombre sea 'Jane Doe'.
-// Los filtros iniciales son ignorados en la creación.
+// crea un usuario cuyo nombre sea 'Jane Doe' y su email 'JaneDoe@leemons.io'.
 leemons.query('usuarios').set(
  { email: 'JaneDoe@leemons.io' },
- { nombre: 'Jane Doe' }
+ { nombre: 'Jane Doe' },
+ { transacting }
 );
 ```
 
 :::
+
+::: tab setMany
+
+  `setMany`
+
+  Funciona igual que `set` pero permite hacerlo en diferentes elementos a la vez
+
+```js
+// Si un usuario con el email 'janedoe@leemons.io' existe,
+// actualiza su nombre a 'Jane Doe'.
+
+// Si por el contrario, este no existe,
+// crea un usuario cuyo nombre sea 'Jane Doe' y su email 'JaneDoe@leemons.io'.
+
+
+// Además, si un usuario con el email 'johndoe@leemons.io' existe,
+// actualiza su nombre a 'John Doe'.
+
+// Si por el contrario, este no existe,
+// crea un usuario cuyo nombre sea 'John Doe' y su email 'JohnDoe@leemons.io'
+leemons.query('usuarios').setMany([
+  {
+    query: { email: 'JaneDoe@leemons.io' },
+    item: { nombre: 'Jane Doe' },
+  },
+  {
+    query: { email: 'JohnDoe@leemons.io' },
+    item: { nombre: 'John Doe' },
+  },
+]
+ { transacting }
+);
+```
+
 ::: tab delete
 
 `delete`
@@ -255,7 +290,7 @@ Elimina la entrada que cumpla con los [filtros](#filtros), en caso de encontrar 
 Una vez la entrada ha sido eliminada, la promesa es resuelta con un objeto vacío, si un error ocurre, la promesa es rechazada con este.
 
 ```js
-leemons.query('usuarios').delete({ id: 1 });
+leemons.query('usuarios').delete({ id: 1 }, { transacting });
 ```
 
 :::
@@ -271,7 +306,7 @@ Si los [filtros](#filtros) provistos seleccionan más de una entrada, todas ella
 Una vez las entradas han sido eliminadas, la promesa es resuelta con un objeto que indica el número de elementos eliminados `{ count: number }`, si un error ocurre, la promesa es rechazada con este.
 
 ```js
-leemons.query('usuarios').deleteMany({ nombre: 'Jane' });
+leemons.query('usuarios').deleteMany({ nombre: 'Jane' }, { transacting });
 ```
 
 :::
@@ -286,7 +321,7 @@ Cuando se encuentren resultados, la promesa será resuelta con un array con dich
 Si ocurre un error, la promesa es rechazada con dicho error.
 
 ```js
-leemons.query('usuarios').find({ nombre: 'Jane' });
+leemons.query('usuarios').find({ nombre: 'Jane' }, { transacting });
 ```
 
 :::
@@ -297,7 +332,29 @@ leemons.query('usuarios').find({ nombre: 'Jane' });
 La consulta `findOne` es la misma que `find`, solo que se añade el [filtro](#filtros) `$limit = 1`.
 
 ```js
-leemons.query('usuarios').findOne({ nombre: 'Jane' });
+leemons.query('usuarios').findOne({ nombre: 'Jane' }, { transacting });
+```
+
+:::
+
+::: tab search
+  `search`
+
+  La consulta `search` permite consultar la base de datos con paginación, funcionando igual que `find` pero aplicando una página actual y un número de elementos por página.
+
+```js
+leemons.query('usuarios').search({ curso: 'segundo' }, { page: 2, limit: 5, transacting});
+```
+
+Esta query buscará todos los usuarios de segundo, ignorando los primero 10 (segunda página) y trayendo 5 de ellos (limit), el output sería:
+
+```js
+{
+  items: [], // Los usuarios encontrados
+  page: number, // La página actual
+  maxPages: number, // El número máximo de páginas
+  count: number, // El número de usuarios que cumplen con la query
+}
 ```
 
 :::
@@ -308,7 +365,7 @@ leemons.query('usuarios').findOne({ nombre: 'Jane' });
 Devuelve el numero de elementos encontrados para los filtros aplicados.
 
 ```js
-leemons.query('usuarios').count({ nombre: 'Jane' });
+leemons.query('usuarios').count({ nombre: 'Jane' }, { transacting });
 ```
 
 :::
