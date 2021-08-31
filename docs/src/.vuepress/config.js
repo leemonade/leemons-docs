@@ -34,7 +34,8 @@ const sidebar = {
           ['/es/dev-docs/packages/leemons-users/permissions/', 'Permisos'],
           ['/es/dev-docs/packages/leemons-users/actions/', 'Acciones de permisos'],
           ['/es/dev-docs/packages/leemons-users/users/', 'Usuarios'],
-          ['/es/dev-docs/packages/leemons-dataset/', 'Dataset']
+          ['/es/dev-docs/packages/leemons-dataset/', 'Dataset'],
+          ['/es/dev-docs/packages/leemons-dataset-example/', 'Ejemplo Dataset']
         ]
       }
     ]
@@ -124,6 +125,9 @@ const localesTheme = {
 
 module.exports = {
   locales,
+  markdown: {
+    lineNumbers: true
+  },
 
   /**
    * Extra tags to be injected to the page HTML `<head>`
