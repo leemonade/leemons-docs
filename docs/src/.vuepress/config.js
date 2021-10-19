@@ -34,6 +34,7 @@ const sidebar = {
           ['/es/dev-docs/packages/leemons-users/permissions/', 'Permisos'],
           ['/es/dev-docs/packages/leemons-users/actions/', 'Acciones de permisos'],
           ['/es/dev-docs/packages/leemons-users/users/', 'Usuarios'],
+          ['/es/dev-docs/packages/leemons-users/user-agent-permissions/', 'Usuarios - Permisos'],
           ['/es/dev-docs/packages/leemons-dataset/', 'Dataset'],
           ['/es/dev-docs/packages/leemons-dataset-example/', 'Ejemplo Dataset']
         ]
