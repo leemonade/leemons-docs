@@ -2,7 +2,7 @@
     "grammarly.overrides": [
         {
             "files": [
-                "**/docs/src/dev-docs/packages/leemons/delete.md"
+                "**/src/dev-docs/packages/leemons/delete.md"
             ],
             "config": {
                 "audience": "general",
