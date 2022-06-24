@@ -22,6 +22,25 @@
   --ifm-navbar-link-color: #fff;
 }
 
+.navbar__title {
+  font-family: 'Lexend', sans-serif;
+}
+
+.menu__link {
+  font-size: 0.95em;
+  font-weight: 900;
+}
+
+.theme-doc-sidebar-item-link-level-2.menu__list-item .menu__link {
+  padding-left: 30px;
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+}
+
+.toc-highlight.table-of-contents__link--active {
+  font-weight: 900;
+}
+
 .navbar .clean-btn {
   color: #fff;
 }
@@ -31,24 +50,31 @@ h2,
 h3,
 h4,
 h5,
-h6,
-a {
+h6 {
   font-family: 'Lexend', sans-serif;
   letter-spacing: 0;
 }
 
 body,
 p,
-span,
 div,
 li,
 td,
 th,
 button,
 input,
-textarea {
+textarea,
+a {
   font-family: 'Inter', sans-serif;
   letter-spacing: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
+}
+
+code > span {
+  font-size: 0.85em;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
