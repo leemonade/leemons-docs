@@ -1,3 +1,10 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # leemons-database
 
 leemons-database is a package for standardizing the database-related stuff.
@@ -8,28 +15,28 @@ It manages all the connections, queries, models and connects with each connector
 
 Connectors are those packages that transform general information into ORM-specific instructions.
 
-::: danger NAME CONVENTION
+:::caution NAME CONVENTION
 Every connector must be named as follows: `leemons-connector-CONNECTOR_NAME`
 :::
 
 No connector comes installed by default, so you need to install your favorite one:
 
-:::: tabs type:border-card
-::: tab yarn
+<Tabs>
+<TabItem value="yarn" label="yarn" default>
 
 ```bash
 yarn add leemons-connector-CONNECTOR_NAME
 ```
 
-:::
-::: tab npm
+</TabItem>
+<TabItem value="npm" label="npm">
 
 ```bash
 npm install leemons-connector-CONNECTOR_NAME
 ```
 
-:::
-::::
+</TabItem>
+</Tabs>
 
 ## Database Manager
 
@@ -37,7 +44,7 @@ The Database Manager is the entry point for this package. It contains a [Connect
 
 The Database Manager is also responsible for building queries and manage the different connectors.
 
-::: tip
+:::tip
 You can access the Database Manager through `leemons.db`
 :::
 
@@ -45,9 +52,8 @@ You can access the Database Manager through `leemons.db`
 
 The connector registry is a function helper for managing all the connectors. It provides the following methods:
 
-:::: tabs
-
-::: tab load
+<details>
+<summary>load</summary>
 
 `load`
 
@@ -59,11 +65,14 @@ The registry imports each connector for using them when required.
 connectorRegistry.connectors.load();
 ```
 
-::: warning REMEMBER
+:::warning REMEMBER
 You should have installed the connectors
 :::
 
-::: tab init
+</details>
+<details>
+<summary>init</summary>
+
 `init`
 
 The registry calls every connector's initialization method and saves the resulting models in `databaseManager.models`.
@@ -74,8 +83,10 @@ You can access these models through `leemons.db.models`.
 connectorRegistry.connectors.init();
 ```
 
-:::
-::: tab getAll
+</details>
+<details>
+<summary>getAll</summary>
+
 `getAll`
 
 Gets all the connectors objects (without the names)
@@ -84,9 +95,10 @@ Gets all the connectors objects (without the names)
 connectorRegistry.connectors.getAll();
 ```
 
-:::
+</details>
+<details>
+<summary>get</summary>
 
-::: tab get
 `get`
 
 Gets the specified connector object
@@ -95,9 +107,10 @@ Gets the specified connector object
 connectorRegistry.connectors.get('connector name');
 ```
 
-:::
+</details>
+<details>
+<summary>getFromConnection</summary>
 
-::: tab getFromConnection
 `getFromConnection`
 
 Gets the connector used in the given connection
@@ -106,9 +119,10 @@ Gets the connector used in the given connection
 connectorRegistry.connectors.getFromConnection('connection name');
 ```
 
-:::
+</details>
+<details>
+<summary>default</summary>
 
-::: tab default
 `default`
 
 Gets the connector used in the default connection
@@ -117,9 +131,10 @@ Gets the connector used in the default connection
 connectorRegistry.connectors.default;
 ```
 
-:::
+</details>
+<details>
+<summary>set</summary>
 
-::: tab set
 `set`
 
 Sets the given value on `databaseManager.connector[provided key]`
@@ -128,13 +143,13 @@ Sets the given value on `databaseManager.connector[provided key]`
 connectorRegistry.connectors.set('connector name', newValue);
 ```
 
-::::
+</details>
 
 ## Query Builder
 
 When you try to query something from the database, it is sometimes difficult to find the desired model. With the query builder is very easy; you only need to remember the model name.
 
-::: tip INFO
+:::tip INFO
 The builder search for the models in `databaseManager.models`.
 :::
 
@@ -145,69 +160,68 @@ When you call the query builder, it gets your model and connector for generating
 The queries are the primary way of interacting with the database. These are standardized instructions that are interpreted by the connectors. If you need to run a custom query, you need to check how it is done with your selected connector.
 
 The provided queries may change depending on the connector, see your connector's docs, but should be as follows:
-::: tip *Many queries
+
+:::tip \*Many queries
 The \*many queries run in transactions, so if an entry fails, the whole query rollbacks (returns to the previous state)
 :::
 
-:::: tabs
+<details>
+<summary>create</summary>
 
-::: tab create
-  `create`
+`create`
 
-  If you want to create any new entry, call this query with an object describing the new values.
+If you want to create any new entry, call this query with an object describing the new values.
 
-  Once the user is created, the resulting object is resolved. If an error occurred, the promise rejects the database error.
+Once the user is created, the resulting object is resolved. If an error occurred, the promise rejects the database error.
 
 ```js
 leemons.query('users').create({
   name: 'Jane',
-  email: 'JaneDoe@leemons.io'
+  email: 'JaneDoe@leemons.io',
 });
 ```
 
-:::
+</details>
+<details>
+<summary>createMany</summary>
 
-::: tab createMany
+`createMany`
 
-  `createMany`
+You can also create many entries in one call. The queries run inside a transaction.
 
-  You can also create many entries in one call. The queries run inside a transaction.
-
-  If all the creations are done correctly, an array with all the users is resolved; if not, the promise rejects the database's accumulated errors.
+If all the creations are done correctly, an array with all the users is resolved; if not, the promise rejects the database's accumulated errors.
 
 ```js
 leemons.query('users').createMany([
   { name: 'Jane', email: 'JaneDoe@leemons.io' },
-  { name: 'John', email: 'JohnDoe@leemons.io' }
+  { name: 'John', email: 'JohnDoe@leemons.io' },
 ]);
 ```
 
-:::
+</details>
+<details>
+<summary>update</summary>
 
-::: tab update
-  `update`
+`update`
 
-  For updating an item, you need to provide a [filter](#filters) for matching the entry, then describe the new item values.
+For updating an item, you need to provide a [filter](#filters) for matching the entry, then describe the new item values.
 
-  When the entry is updated, an object with the new values is resolved. If no entry matches the query or an error occurred, the promise rejects.
+When the entry is updated, an object with the new values is resolved. If no entry matches the query or an error occurred, the promise rejects.
 
 ```js
-leemons.query('users').update(
-  { id: 1 },
-  { name: 'Janie' }
-);
+leemons.query('users').update({ id: 1 }, { name: 'Janie' });
 ```
 
-:::
-
-::: tab updateMany
+</details>
+<details>
+<summary>updateMany</summary>
 
 `updateMany`
 
 For updating multiple items, you need to provide an array with each update information:
 
-* [filters](#filters) so we can update the matching entry.
-* The new item values.
+- [filters](#filters) so we can update the matching entry.
+- The new item values.
 
 The update runs inside a transaction. When all the entries are updated, an array with the new values is resolved. If an error occurs, the promise rejects.
 
@@ -215,24 +229,24 @@ The update runs inside a transaction. When all the entries are updated, an array
 leemons.query('users').updateMany([
   {
     query: { id: 1 },
-    item:  { name: 'Jane' }
+    item: { name: 'Jane' },
   },
   {
-    query: { id: 2},
-    item:  { name: 'John' }
-  }
+    query: { id: 2 },
+    item: { name: 'John' },
+  },
 ]);
 ```
 
-:::
-
-::: tab set
+</details>
+<details>
+<summary>set</summary>
 
 `set`
 
 The set query lets you update the value of an entry if it exists; if not, it creates it.
 
-```js
+````js
 // If a user with the email 'JaneDoe@leemons.io' exists, it sets its name to 'Jane Doe'.
 // If the user does not exist, it creates a new one with the given email and name.
 leemons.query('users').set(
@@ -240,7 +254,10 @@ leemons.query('users').set(
   { name: 'Jane Doe' }
 );
 
-::: tab delete
+</details>
+<details>
+<summary>delete</summary>
+
   `delete`
 
   Deleting an entry is as easy as providing the necessary [filters](#filters) for matching an entry.
@@ -249,51 +266,51 @@ leemons.query('users').set(
 
 ```js
 leemons.query('users').delete({ id: 1 });
-```
+````
 
-:::
+</details>
+<details>
+<summary>deleteMany</summary>
 
-::: tab deleteMany
+`deleteMany`
 
-  `deleteMany`
+You can also delete many items matching some [filters](#filters). This query is separated from `delete` to avoid unwanted data loss.
 
-  You can also delete many items matching some [filters](#filters). This query is separated from `delete` to avoid unwanted data loss.
-
-  The query runs inside a transaction. When all the items are deleted, an array with empty objects is resolved. If any error occurs, the promise rejects.
+The query runs inside a transaction. When all the items are deleted, an array with empty objects is resolved. If any error occurs, the promise rejects.
 
 ```js
 leemons.query('users').deleteMany({ name: 'Jane' });
 ```
 
-:::
+</details>
+<details>
+<summary>find</summary>
 
-::: tab find
-  `find`
+`find`
 
-  When you need to get data from the database, you only have to run a find query; all we need is the [filters](#filters) you want.
+When you need to get data from the database, you only have to run a find query; all we need is the [filters](#filters) you want.
 
-  When some results are found, an array with them is resolved. If there are no matching results, an empty array is returned.
+When some results are found, an array with them is resolved. If there are no matching results, an empty array is returned.
 
-  If an error occurs, the promise throws the error.
+If an error occurs, the promise throws the error.
 
 ```js
 leemons.query('users').find({ name: 'Jane' });
 ```
 
-:::
+</details>
+<details>
+<summary>findOne</summary>
 
-::: tab findOne
-  `findOne`
+`findOne`
 
-  The `findOne` query is the same as `find`, but the `$limit` [filter](#filters) is added to the query.
+The `findOne` query is the same as `find`, but the `$limit` [filter](#filters) is added to the query.
 
 ```js
 leemons.query('users').findOne({ name: 'Jane' });
 ```
 
-:::
-
-::::
+</details>
 
 ### Filters
 
@@ -305,9 +322,8 @@ The filters are divided into three groups: visualization, logic, comparison.
 
 With the visualization filters, you can modify how the data is represented.
 
-:::: tabs
-
-::: tab sort
+<details>
+<summary>sort</summary>
 
 `sort`
 
@@ -321,9 +337,9 @@ The `$sort` filter is a comma-separated string with different fields and order d
 leemons.query('users').find({ $sort: 'name:ASC, email:DESC' });
 ```
 
-:::
-
-::: tab offset
+</details>
+<details>
+<summary>offset</summary>
 
 `offset`
 
@@ -335,9 +351,9 @@ The `$offset` filter is a numeric value, and it can also be called `$start`.
 leemons.query('users').find({ $offset: 10 });
 ```
 
-:::
-
-::: tab limit
+</details>
+<details>
+<summary>limit</summary>
 
 `limit`
 
@@ -349,17 +365,14 @@ The `$limit` filter is a numeric value.
 leemons.query('users').find({ $limit: 42 });
 ```
 
-:::
-
-::::
+</details>
 
 #### Logic
 
 You can use the logic filters to apply logic operators to your queries.
 
-:::: tabs
-
-::: tab where
+<details>
+<summary>where</summary>
 
 `where`
 
@@ -367,7 +380,7 @@ You can use the `$where` filter to apply the [comparison filters](#comparison); 
 
 ```js
 leemons.query('users').find({
-  $where: { id: 1 }
+  $where: { id: 1 },
 });
 ```
 
@@ -376,16 +389,13 @@ You can also use the `$where` filter to apply `AND` logic.
 ```js
 // Selects all the users in second grade who are delegates
 leemons.query('users').find({
-  $where: [
-    { course: '2' },
-    { role: 'delegate' }
-  ]
+  $where: [{ course: '2' }, { role: 'delegate' }],
 });
 ```
 
-:::
-
-::: tab or
+</details>
+<details>
+<summary>or</summary>
 
 `or`
 
@@ -394,22 +404,16 @@ You can use the `$or` filter for matching entries with different values.
 ```js
 // Selects all the users who are delegates in second grade or teachers
 leemons.query('users').find({
-  $or: [
-    { course: '2', role: 'delegate' },
-    { role: 'teacher' }
-  ]
+  $or: [{ course: '2', role: 'delegate' }, { role: 'teacher' }],
 });
 ```
 
-:::
-
-::::
+</details>
 
 #### Comparison
 
-:::: tabs
-
-::: tab equals
+<details>
+<summary>equals</summary>
 
 `equals`
 
@@ -421,9 +425,9 @@ Only specify the field and the value (e.g. `{ id: 1 }`)
 leemons.query('users').find({ id: 1, name: 'Jane' });
 ```
 
-:::
-
-::: tab not equals
+</details>
+<details>
+<summary>not equals</summary>
 
 `not equals`
 
@@ -435,9 +439,9 @@ Specify the column name ending with the suffix `_$ne`.
 leemons.query('users').find({ name_$ne: 'Jane' });
 ```
 
-:::
-
-::: tab in
+</details>
+<details>
+<summary>in</summary>
 
 `in`
 
@@ -449,9 +453,9 @@ Specify the column name ending with the suffix `_$in`.
 leemons.query('users').find({ name_$in: ['Jane', 'John'] });
 ```
 
-:::
-
-::: tab not in
+</details>
+<details>
+<summary>not in</summary>
 
 `nin`
 
@@ -463,9 +467,9 @@ Specify the column name ending with the suffix `_$nin`.
 leemons.query('users').find({ name_$nin: ['Jane', 'John'] });
 ```
 
-:::
-
-::: tab contains
+</details>
+<details>
+<summary>contains</summary>
 
 `contains`
 
@@ -477,9 +481,9 @@ Specify the column name ending with the suffix `_$contains`.
 leemons.query('users').find({ name_$contains: 'a' });
 ```
 
-:::
-
-::: tab ncontains
+</details>
+<details>
+<summary>not contains</summary>
 
 `ncontains`
 
@@ -491,9 +495,9 @@ Specify the column name ending with the suffix `_$ncontains`.
 leemons.query('users').find({ name_$ncontains: 'a' });
 ```
 
-:::
-
-::: tab strict contains
+</details>
+<details>
+<summary>strict contains</summary>
 
 `containss`
 
@@ -505,9 +509,9 @@ Specify the column name ending with the suffix `_$containss`.
 leemons.query('users').find({ name_$containss: 'S' });
 ```
 
-:::
-
-::: tab not strict contains
+</details>
+<details>
+<summary>strict not contains</summary>
 
 `ncontainss`
 
@@ -519,9 +523,9 @@ Specify the column name ending with the suffix `_$ncontains`.
 leemons.query('users').find({ name_$ncontainss: 'S' });
 ```
 
-:::
-
-::: tab lower than
+</details>
+<details>
+<summary>lower than</summary>
 
 `lower than`
 
@@ -533,9 +537,9 @@ Specify the column name ending with the suffix `_$lt`.
 leemons.query('users_grades').find({ grade_$lt: 5 });
 ```
 
-:::
-
-::: tab lower than or equal
+</details>
+<details>
+<summary>lower than or equal</summary>
 
 `lower than or equal`
 
@@ -547,9 +551,9 @@ Specify the column name ending with the suffix `_$lte`.
 leemons.query('users_grades').find({ grade_$lte: 4 });
 ```
 
-:::
-
-::: tab greater than
+</details>
+<details>
+<summary>greater than</summary>
 
 `greater than`
 
@@ -561,9 +565,9 @@ Specify the column name ending with the suffix `_$gt`.
 leemons.query('users_grades').find({ grade_$gt: 4 });
 ```
 
-:::
-
-::: tab greater than or equal
+</details>
+<details>
+<summary>greater than or equal</summary>
 
 Search for entries whose values are greater or equal to the desired value.
 
@@ -573,9 +577,9 @@ Specify the column name ending with the suffix `_$gte`.
 leemons.query('users_grades').find({ grade_$lte: 5 });
 ```
 
-:::
-
-::: tab is NULL
+</details>
+<details>
+<summary>is NULL</summary>
 
 Search for entries whose values are null (true) or not (false).
 
@@ -585,6 +589,4 @@ Specify the column name ending with the suffix `_$null`.
 leemons.query('users').find({ email_$null: true, phone_$null: false });
 ```
 
-:::
-
-::::
+</details>

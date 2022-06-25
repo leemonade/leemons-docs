@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # leemons
 
 The leemons package is the core, where all the logic is done, from server set-up to model standardization.
@@ -8,11 +12,11 @@ leemons comes with a CLI (Command Line Interface), which lets you run the app qu
 
 ### Commands
 
-`$ leemons start`: Starts the app.
+`$ leemons start` Starts the app.
 
 When you start the app, you can use leemons with all the features but won't detect code changes until you restart the server.
 
-`$ leemons dev`: Starts the app in development mode.
+`$ leemons dev` Starts the app in development mode.
 
 When the app starts in development mode, the server is restarted every time a file change occurs.
 
@@ -20,17 +24,17 @@ When the app starts in development mode, the server is restarted every time a fi
 
 <!-- TODO: Add link to config -->
 
-The server is started through a class instantiation; this loads all the configuration from the [config's directory](), then a new server is initialized.
+The server is started through a class instantiation; this loads all the configuration from the `config's directory`, then a new server is initialized.
 
 Once the app is constructed, you need to load it with `leemons.load()`, which will load the [models](#models) and initialize the [Database Manager](../leemons-database/#database-manager) (which will create the database schema).
 
-::: tip ACCESSING THE MODELS
+:::tip ACCESSING THE MODELS
 You can access the database manager through `leemons.db` and the models with `leemons.db.models`.
 :::
 
 Once everything is loaded, you can start the app with `leemons.start()`, where the server starts listening.
 
-::: tip SHORTHAND
+:::tip SHORTHAND
 You can directly start the app. It loads everything before starting.
 :::
 
@@ -38,7 +42,7 @@ You can directly start the app. It loads everything before starting.
 
 The configuration will always be stored in `leemons.config`, this will include all the configuration you set in `configDirectory/*.js` or `configDirectory/*.json`, every file will be stored under `leemons.config.FILE_NAME`.
 
-::: tip
+:::tip
 The config directory will be:
 
 ```js
@@ -48,7 +52,7 @@ env('CONFIG_DIR', 'config');
 [See env specification](../leemons-utils/#env)
 :::
 
-::: tip
+:::tip
 You can use the config helpers created by the ConfigProvider:
 
 ```js
@@ -70,7 +74,8 @@ The models are the basic unit for a database schema. They are JSON objects which
 
 1. All the fields are completed with a default model:
 
-::: details Show the default model
+<details>
+<summary>Show the default model</summary>
 
 ```js
 const defaultModel = {
@@ -94,21 +99,24 @@ const defaultModel = {
 };
 ```
 
-:::
+</details>
 
-2. The names are standardized to avoid name repetition.
+1. The names are standardized to avoid name repetition.
 
-::: details See standardization guide
+<details>
+<summary>See standardization guide</summary>
+
 Every model is stored in `leemons` on a property based on the model's origin
 
 e.g., you have a plugin called user-administration, then your models are stored under:
 `leemons.plugins.user-administration.models` and your model names and collection names will be transformed to: `plugins_user-administration::OriginalName`.
 
-:::
+</details>
 
-3. The data is structured
+1. The data is structured
 
-::: details See structure
+<details>
+<summary>See structure</summary>
 
 ```js
 const model = {
@@ -128,10 +136,10 @@ const model = {
     // All the attributes that are not many to many relations
   }
 }
+```
 
-:::
+</details>
 
-
-::: warning Note
+:::info Note
 You can find some extra information in your final model as a result of a connector
 :::
