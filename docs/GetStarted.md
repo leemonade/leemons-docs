@@ -4,7 +4,7 @@ sidebar_position: 2
 import { Button, ThemeProvider, Stack } from "@bubbles-ui/components";
 import ReactPlayer from 'react-player'
 
-# Get Started (revisar x Johan)
+# Get Started
 
 # **Create a Leemons project**
 
