@@ -65,9 +65,8 @@ The "Ongoing Activities" section allows the teacher to manage the assignments in
 
 On the main ongoing activities page, you can review all the assignments that have been made and are still open.
 
-![Main OnGoing page **(REVISAR PARA TRADUCIR)**](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/67ec841b-b586-4e58-aa28-a41f6ee02a65/Untitled.png)
+![Main OnGoing page](/img/Main_ongoing.png)
 
-Main OnGoing page **(REVISAR PARA TRADUCIR)**
 
 ## Detail OnGoing
 
