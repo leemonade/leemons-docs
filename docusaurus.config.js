@@ -45,8 +45,7 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/leemonade/leemons-docs/tree/main/',
         },
         blog: false,
         theme: {
@@ -71,7 +70,7 @@ const config = {
           //  position: 'right',
           // },
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/leemonade/leemons',
             label: 'GitHub',
             position: 'right',
           },
@@ -84,8 +83,8 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
-                to: '/intro',
+                label: 'Installation',
+                to: '/getting-started/installation',
               },
             ],
           },
@@ -94,15 +93,15 @@ const config = {
             items: [
               {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                href: 'https://stackoverflow.com/questions/tagged/leemons',
               },
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                href: 'https://discord.gg/wbgMhkrWBp',
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                href: 'https://twitter.com/leemonsedtech',
               },
             ],
           },
@@ -111,7 +110,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/leemonade/leemons',
               },
             ],
           },
