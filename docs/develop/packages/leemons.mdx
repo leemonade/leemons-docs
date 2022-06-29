@@ -1,0 +1,278 @@
+---
+sidebar_position: 1
+sidebar_label: 'leemons'
+---
+
+# Leemons package
+
+Leemons is the main package of the application, from which the rest of the necessary packages and libraries are initialized, the server is raised and the Frontend is compiled.
+
+## CLI
+
+To make it easier to use leemons, we have included a CLI (Command Line Interface), which consists of two commands.
+
+### Commands
+
+`$ leemons start` Starts the app.
+
+When you start the app in production mode, you can use leemons with full functionality, but the app will not detect the changes until the process is restarted.
+
+In production mode, dependencies are also installed and the Frontend is compiled (if not already compiled).
+
+`$ leemons dev` Starts the app in development mode.
+
+When you start the app in development mode, it starts the app in parts, in first instance it starts a process that will listen to the main changes in the app, this process in turn, starts another one that will have the application itself.
+
+Master Process:
+
+- Listens for changes in the core packages.
+- Listens for changes in the app configuration
+- When there are changes it restarts the dependent processes (workers).
+
+Worker process:
+
+- Initializes the application configuration
+- Listens for changes in the Frontend and starts the Front service.
+- Listens for changes in the Backend and starts the Back service.
+
+In this way, the waiting time between the changes and the app update is optimized to the maximum.
+
+## App
+
+The application consists of three parts: configuration, Frontend and Backend, each of them is started by the `Leemons` class.
+
+In the instantiation of the class, a [Koa.js](https://koajs.com/) server and two [Koa-Router](https://www.npmjs.com/package/koa-router) are created (one for the app in general and one for Backend). Next, it is necessary to load the configuration using the `leemons.loadAppConfig` method, which will be used in both Front and Back loading.
+
+Once the app configuration is loaded, it is necessary to load the configuration of the different plugins, for this, you have the method `leemons.loadPluginsConfig`, and then you can start loading the Back and Front.
+
+Now that all the configuration is loaded, you can load both the Back and the Front, it doesn't matter which service you load first, you can even load them at the same time: `leemons.loadBack` and `leemons.loadFront`.
+
+Now everything is loaded and you can start the app with the `leemons.start` method (but not before indicating that everything is loaded `leemons.loaded = true`).
+
+If you don't want to worry about how the app starts inside, you can opt for the `leemons.load` method which will do all these steps for you, or just `leemons.start` which will detect that the app hasn't loaded yet and load it before starting it.
+
+### Configuration
+
+The app configuration is performed with the `leemons.loadAppConfig` method, which loads all JavaScript and JSON files in the configuration folder.
+
+:::tip TIP
+The configuration folder can be changed using the `CONFIG_DIR` environment variable, by default it will be `/config/`.
+:::
+
+You can find the configuration in `leemons.config`, following the configuration folder structure:
+
+`configDirectory/database.js` -> `leemons.config.database`.
+
+`configDirectory/config.json` -> `leemons.config.config` -> `leemons.config.config`.
+
+:::tip INFO
+
+The configuration object is a ConfigProvider, which has the following auxiliary methods:
+
+```js
+get: (key, defaultValue) => lodash.get(config, key, defaultValue),
+has: (key)                  => lodash.has(config, key),
+set: (key, value)           => lodash.set(config, key, value)
+```
+
+[Lodash documentation](https://lodash.com/docs/)
+:::
+
+### Backend Service
+
+The Backend service is in charge of managing the server, the application and the database. The first thing that happens is the loading of the models, once all are loaded, we proceed to initialize the [database manager](leemons-database/#database-manager) (stored in `leemons.db`), then, the schema specified in the database is created and finally the ORM model used in the installed [connector](leemons-database/#connectors) is initialized.
+
+The entry point to the Backend is the API, which is accessible through the `https://{url}/api/{endpoint}` endpoint. Thus exposing the different [controllers](#controllers) and [services](#services).
+
+### Frontend Service
+
+The Frontend service is in charge in first instance of collecting all the necessary files to load the web, it also installs the necessary dependencies and compiles the final version.
+
+### Models
+
+Models are the basic unit of a database schema. They are JSON objects interpreted in a simpler structure:
+
+1. All fields are populated with a default model:
+
+<details>
+<summary>Show the default model</summary>
+
+```js
+const defaultModel = {
+  modelName: name,
+  connection: leemons.config.get('database.defaultConnection'),
+  collectionName: name,
+  info: {
+    name,
+    description: '',
+  },
+  options: {
+    useTimestamps: false,
+  },
+  attributes: {},
+  primaryKey: {
+    name: 'id',
+    type: 'int',
+  },
+  type: 'collection',
+  target: 'global',
+};
+```
+
+</details>
+
+1. The names are standardized to avoid name repetition.
+
+<details>
+<summary>See standardization guide</summary>
+
+Every model is stored in `leemons` on a property based on the model's origin
+
+e.g., you have a plugin called user-administration, then your models are stored under:
+`leemons.plugins.user-administration.models` and your model names and collection names will be transformed to: `plugins_user-administration::OriginalName`.
+
+</details>
+
+1. The data is structured
+
+<details>
+<summary>See structure</summary>
+
+```js
+const model = {
+  connection,
+  modelName,
+  type,
+  target
+
+  schema: { // used in schema and model creation (connector)
+    collectionName,
+    options,
+    attributes,
+    primaryKey
+  }
+
+  allAttributes: { // used in the queryBuilders
+    // All the attributes that are not many to many relations
+  }
+}
+```
+
+</details>
+
+:::info Note
+More information can be found in a final model as a result of a connector.
+:::
+
+## Plugins
+
+Leemons works through plugins, these are a code extension, allowing to add more functionality to the Frontend or Backend. Creating a plugin is super simple, you only need to follow a structure and do the rest as usual.
+
+Plugins can be installed in two ways:
+
+- With [NPM](https://www.npmjs.com). They must be NPM packages whose name is `leemons-plugin-{PLUGIN_NAME}`.
+- Create a folder inside the plugin directory with the plugin name.
+
+A plugin, depending on the services it extends, must contain some folders or others. The functionalities that a plugin can add are controllers, services, models and Frontend.
+
+:::tip INFO
+All plugin code is executed in a secure environment and does not have access to the application's `process.env`, but to the one specified in the plugin's `.env`.
+
+This file is executed by Leemons in search of a JSON
+:::
+
+### Controllers
+
+The controllers are a set of functions in charge of answering a request to the API, these functions have an endpoint (API path) and a method (GET, POST, DELETE...) associated to them.
+
+The controllers must be defined in the controllers folder, specified in the plugin configuration (default is `/plugin/controllers/`), inside, a `routes.js` or `routes.json` file specifying the different endpoints, next to this, each of the `controller.js` controllers.
+
+**How to define an endpoint?**
+
+Inside the `routes` file you must declare an array according to the route, method and controller.
+
+Additionally you can specify if you need to be authenticated and if you want that only users with certain permissions can access:
+
+```json
+[
+  {
+    "path": "/user", // Receives requests at `POST /user`
+    "method": "POST",
+    "handler": "users.register" // Resolves the request with the "register" function from `controllers/users.js`
+  },
+  {
+    "path": "/user/:id", // Receives requests at `GET /user/:id`
+    "method": "GET",
+    "handler": "users.userInfo" // Resolves the request with the "userInfo" function from `controllers.users.js`
+  },
+  {
+    "path": "/user/:id", // Receives requests at `GET /user/:id`
+    "method": "DELETE",
+    "authenticated": true, // Only logged in users with an authorization token will be able to access.
+    "permissions": ["delete-users"], // Only users with the "delete-users" permission will be able to access
+    "handler": "users.delete" // Resolves the request with the "userInfo" function from `controllers.users.js`
+  }
+]
+```
+
+:::caution Caution
+The specified path will not be the actual endpoint, but will resolve to the following: `/api/{PLUGIN_NAME}/{SPECIFIED_PATH}`.
+:::
+
+**What should the controller function be like?**.
+
+The controller function, should be the same as you would use in KOA.js, it will receive a [Context](https://koajs.com/#context) with all the information of the request.
+
+:::caution Middlewares
+Currently a plugin can't add middlewares, but we are working on it 👩‍💻
+:::
+
+### Services
+
+Services are a set of functions just like controllers, but intended for general use, for example, a helper function that sends an email or a helper function that calculates the final grade.
+
+The services must be a JavaScript file described in the services folder (by default `/services/`) and is stored in `leemons.plugins.{PLUGIN_NAME}.services.{FILE_NAME}`. The content of this file is loaded in a safe environment (but is not executed if you don't do it, being able to export any kind of data).
+
+### Models {#plugin-model}
+
+A plugin may need to use the database, for that, it can create `models`, these are JSONs or JavaScripts in the models folder (by default `/models/`).
+
+The specified models can be accessed via `leemons.plugins.{PLUGIN_NAME}.models.{MODEL_NAME}` or via `leemons.query({MODEL_NAME})`.
+
+### Frontend
+
+Extending the Frontend is the simplest process, as it works as a small-scale React app in the Front folder (default `/frontend/`).
+
+:::danger TODO
+Must document the `<Public>` and `<Private>` for the frontend routes.
+:::
+
+The rest of the files create them inside the `src` folder and you can import them using `import {} from '@{PLUGIN_PLUGIN_NAME}/{PATH_D FROM_SRC}'`.
+
+## Providers
+
+Providers work like a plugin but with more limitations, their goal is to extend a plugin by giving it more functionality.
+
+Providers can be installed in two ways:
+
+- With [NPM](https://npmjs.com). They must be NPM packages whose name is `leemons-provider-{PROVIDER_NAME}`.
+- Create a folder inside the plugins directory with the name of the plugin.
+
+Unlike plugins a provider can only add as functionalities services and models.
+
+:::info INFO
+All the code of the providers is executed in a safe environment and does not have access to the process.env of the application, but to the one specified in the .env of the provider.
+
+This file is executed by Leemons looking for a JSON
+:::
+
+### Configuration
+
+The providers within their configuration file need a new field where they specify which plugin will have access to it (the provider).
+
+```js
+module.exports = {
+  private: true,
+  pluginsCanUseMe: ['plugin-name-without-leemons-plugin-prefix'],
+};
+```

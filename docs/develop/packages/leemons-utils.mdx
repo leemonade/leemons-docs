@@ -1,0 +1,542 @@
+---
+sidebar_position: 4
+sidebar_label: 'leemons-utils'
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Utils package
+
+`leemons-utils` is the package that contains all the functions to help you in development, it contains common functionality that can be useful to you at any time.
+
+To use `leemons-utils` in your packages, you need to install it first:
+
+<Tabs>
+<TabItem value="yarn" label="yarn" default>
+
+```bash
+yarn add leemons-utils
+```
+
+</TabItem>
+<TabItem value="npm" label="npm">
+
+```bash
+npm install leemons-utils
+```
+
+</TabItem>
+</Tabs>
+
+## env
+
+The env function returns the value of the requested environment variable if it exists, otherwise it returns the specified default value.
+
+```js
+const { env } = require('leemons-utils');
+
+// If NODE_ENV is not defined, returns 'development',
+// otherwise, process.env.NODE_ENV is returned.
+env('NODE_ENV', 'development');
+```
+
+## getModel
+
+Returns the requested model if it exists, if it does not exist, returns null.
+
+:::info NOTE
+The returned models do not contain ORM information.
+:::
+
+```js
+const { getModel } = require('leemons-utils');
+
+getModel('leemons::users');
+```
+
+If an array of models is provided, search for the model in that array.
+
+```js
+const { getModel } = require('leemons-utils');
+
+const models = [
+ model1: {...},
+ model2: {...},
+ ...
+];
+
+getModel('model1', models);
+```
+
+## generateModelName
+
+Generates a name for the model based on the origin and original name.
+
+```js
+const { generateModelName } = require('leemons-utils');
+
+const modelName = generateModelName('plugins.users', 'roles');
+
+console.log(modelName); // > plugins_users::roles
+```
+
+## parseFilters
+
+Transforms the [filters](leemons-database/#filters) into a JSON useful for the [buildQuery](#buildquery) function.
+
+Filters and default filters are JSONs for [filter](leemons-database/#filters) query.
+
+```js
+const { parseFilters } = require('leemons-utils');
+
+const filters = {
+  $or: [{ name_$contains: 'John' }, { nname_$contains: 'Jane' }],
+};
+
+const defaults = {
+  $limit: 5,
+};
+
+const query = parseFilters({ filters, defaults, model });
+```
+
+## buildQuery
+
+Calls the query builder of the model we are using.
+
+buildQuery requires the following parameters:
+
+- The model you want to query.
+- The [filters](leemons-database/#filters) you want to use in your [query](leemons-database/#queries).
+- Other parameters that your [connector](leemons-database/#connectors) requires.
+
+```js
+const { buildQuery } = require('leemons-utils');
+
+// The final filters to use in your queries
+const filters = parseFilters({ ... }, { ... }, model);
+
+const query = buildQuery(model, filters, ...rest);
+```
+
+## readdirRecursiveSync
+
+Reads a directory and all its subfolders, at the end it returns a JSON with the directory structure:
+
+```js
+const { readdirRecursiveSync } = require('leemons-utils');
+readdirRecursiveSync('plugins');
+```
+
+<details>
+  <summary>JSON output:</summary>
+
+```json
+{
+  "name": "plugins",
+  "type": "directory",
+  "path": "",
+  "content": [
+    {
+      "name": "user-admin",
+      "type": "directory",
+      "path": "user-admin",
+      "content": [
+        {
+          "name": "config",
+          "type": "directory",
+          "path": "user-admin/config",
+          "content": [
+            {
+              "name": "config.js",
+              "path": "user-admin/config/config.js",
+              "type": "file"
+            }
+          ]
+        },
+        {
+          "name": "controllers",
+          "type": "directory",
+          "path": "user-admin/controllers",
+          "content": [
+            {
+              "name": "posts.js",
+              "path": "user-admin/controllers/posts.js",
+              "type": "file"
+            },
+            {
+              "name": "routes.js",
+              "path": "user-admin/controllers/routes.js",
+              "type": "file"
+            },
+            {
+              "name": "users.js",
+              "path": "user-admin/controllers/users.js",
+              "type": "file"
+            }
+          ]
+        },
+        {
+          "name": "models",
+          "type": "directory",
+          "path": "user-admin/models",
+          "content": [
+            {
+              "name": "posts.js",
+              "path": "user-admin/models/posts.js",
+              "type": "file"
+            },
+            {
+              "name": "users.js",
+              "path": "user-admin/models/users.js",
+              "type": "file"
+            }
+          ]
+        },
+        {
+          "name": "next",
+          "type": "directory",
+          "path": "user-admin/next",
+          "content": [
+            {
+              "name": "pages",
+              "type": "directory",
+              "path": "user-admin/frontend/pages",
+              "content": [
+                {
+                  "name": "login.js",
+                  "path": "user-admin/frontend/pages/login.js",
+                  "type": "file"
+                },
+                {
+                  "name": "register.js",
+                  "path": "user-admin/frontend/pages/register.js",
+                  "type": "file"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+</details>
+
+You can also generate the integrity of a directory with the checksums algorithm as follows:
+
+```js
+const { readdirRecursiveSync } = require('leemons-utils');
+readdirRecursiveSync('plugins', { checksums: true });
+```
+
+<details>
+  <summary>JSON output:</summary>
+
+```json
+{
+  "name": "plugins",
+  "type": "directory",
+  "path": "",
+  "content": [
+    {
+      "name": "user-admin",
+      "type": "directory",
+      "path": "user-admin",
+      "content": [
+        {
+          "name": "config",
+          "type": "directory",
+          "path": "user-admin/config",
+          "content": [
+            {
+              "name": "config.js",
+              "path": "user-admin/config/config.js",
+              "type": "file",
+              "checksum": "af2d854eb189e9f51836ae1a12c260b4"
+            }
+          ],
+          "checksum": "4760ab8606783caef4c3e58d936097dd"
+        },
+        {
+          "name": "controllers",
+          "type": "directory",
+          "path": "user-admin/controllers",
+          "content": [
+            {
+              "name": "posts.js",
+              "path": "user-admin/controllers/posts.js",
+              "type": "file",
+              "checksum": "d7d3c1fa7f1c9c0fec246ae96cc58381"
+            },
+            {
+              "name": "routes.js",
+              "path": "user-admin/controllers/routes.js",
+              "type": "file",
+              "checksum": "cb66af956dfcd169d4aaca4225ccf4be"
+            },
+            {
+              "name": "users.js",
+              "path": "user-admin/controllers/users.js",
+              "type": "file",
+              "checksum": "3d82dfff5f688648aa2a86433b87489d"
+            }
+          ],
+          "checksum": "e2149e209f845c0c97a26a2314390c38"
+        },
+        {
+          "name": "models",
+          "type": "directory",
+          "path": "user-admin/models",
+          "content": [
+            {
+              "name": "posts.js",
+              "path": "user-admin/models/posts.js",
+              "type": "file",
+              "checksum": "388d3df6e2d65280ba24f2172acb46f4"
+            },
+            {
+              "name": "users.js",
+              "path": "user-admin/models/users.js",
+              "type": "file",
+              "checksum": "b6878d605208324f2ad9e09a836b36e5"
+            }
+          ],
+          "checksum": "bc802a1b666fca93d2f0a896e3581b76"
+        },
+        {
+          "name": "next",
+          "type": "directory",
+          "path": "user-admin/next",
+          "content": [
+            {
+              "name": "pages",
+              "type": "directory",
+              "path": "user-admin/frontend/pages",
+              "content": [
+                {
+                  "name": "login.js",
+                  "path": "user-admin/frontend/pages/login.js",
+                  "type": "file",
+                  "checksum": "c67ce04cbef16144dc5414ca60f086fb"
+                },
+                {
+                  "name": "register.js",
+                  "path": "user-admin/frontend/pages/register.js",
+                  "type": "file",
+                  "checksum": "ebcd2ebd8792719b02cc75a90de6fd59"
+                }
+              ],
+              "checksum": "7b61e9b346c733147261fde09f987849"
+            }
+          ],
+          "checksum": "4183d53dcbcea6219f46f78583d69f3c"
+        }
+      ],
+      "checksum": "144424ced9d8f36104427384974bee52"
+    }
+  ],
+  "checksum": "f78ad87301ce507b255e8fb98c3ab7ca"
+}
+```
+
+</details>
+
+If you want to ignore a file or folder, you need to call the function with the `ignore` parameter:
+
+```js
+const { readdirRecursiveSync } = require('leemons-utils');
+readdirRecursiveSync('plugins', { ignore: ['config', 'frontend', 'models', 'posts.js'] });
+```
+
+<details>
+  <summary>JSON output:</summary>
+
+```json
+{
+  "name": "plugins",
+  "type": "directory",
+  "path": "",
+  "content": [
+    {
+      "name": "user-admin",
+      "type": "directory",
+      "path": "user-admin",
+      "content": [
+        {
+          "name": "controllers",
+          "type": "directory",
+          "path": "user-admin/controllers",
+          "content": [
+            {
+              "name": "routes.js",
+              "path": "user-admin/controllers/routes.js",
+              "type": "file"
+            },
+            {
+              "name": "users.js",
+              "path": "user-admin/controllers/users.js",
+              "type": "file"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+</details>
+
+Finally, you can get the output with all JSONs instead of Arrays.
+
+```js
+const { readdirRecursiveSync } = require('leemons-utils');
+readdirRecursiveSync('plugins', { json: true });
+```
+
+<details>
+  <summary>JSON output:</summary>
+
+```json
+{
+  "name": "plugins",
+  "type": "directory",
+  "path": "",
+  "content": {
+    "user-admin": {
+      "name": "user-admin",
+      "type": "directory",
+      "path": "user-admin",
+      "content": {
+        "config": {
+          "name": "config",
+          "type": "directory",
+          "path": "user-admin/config",
+          "content": {
+            "config.js": {
+              "name": "config.js",
+              "path": "user-admin/config/config.js",
+              "type": "file"
+            }
+          }
+        },
+        "controllers": {
+          "name": "controllers",
+          "type": "directory",
+          "path": "user-admin/controllers",
+          "content": {
+            "posts.js": {
+              "name": "posts.js",
+              "path": "user-admin/controllers/posts.js",
+              "type": "file"
+            },
+            "routes.js": {
+              "name": "routes.js",
+              "path": "user-admin/controllers/routes.js",
+              "type": "file"
+            },
+            "users.js": {
+              "name": "users.js",
+              "path": "user-admin/controllers/users.js",
+              "type": "file"
+            }
+          }
+        },
+        "models": {
+          "name": "models",
+          "type": "directory",
+          "path": "user-admin/models",
+          "content": {
+            "posts.js": {
+              "name": "posts.js",
+              "path": "user-admin/models/posts.js",
+              "type": "file"
+            },
+            "users.js": {
+              "name": "users.js",
+              "path": "user-admin/models/users.js",
+              "type": "file"
+            }
+          }
+        },
+        "next": {
+          "name": "next",
+          "type": "directory",
+          "path": "user-admin/next",
+          "content": {
+            "pages": {
+              "name": "pages",
+              "type": "directory",
+              "path": "user-admin/frontend/pages",
+              "content": {
+                "login.js": {
+                  "name": "login.js",
+                  "path": "user-admin/frontend/pages/login.js",
+                  "type": "file"
+                },
+                "register.js": {
+                  "name": "register.js",
+                  "path": "user-admin/frontend/pages/register.js",
+                  "type": "file"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+</details>
+
+## getStackTrace
+
+If you need to access the call stack of the current function, with this function you can.
+
+After its execution, it provides you with the last 10 calls, if you indicate the index of the desired call, it will return only the indicated call.
+
+```js
+const { getStackTrace } = require('leemons-utils');
+
+console.log(getStackTrace());
+// > [
+//     {
+//       "fileName": "/leemons/packages/leemons-utils/lib/getStackTrace.js",
+//       "lineNumber": 13,
+//       "columnNumber": 15,
+//       "functionName": "getStackTrace"
+//     },
+//     {
+//       "fileName": "/leemons/packages/leemons/lib/leemons.js",
+//       "lineNumber": 154,
+//       "columnNumber": 32,
+//       "functionName": "load"
+//     },
+//     ...
+//   ]
+```
+
+Or just the call we need:
+
+```js
+const { getStackTrace } = require('leemons-utils');
+
+console.log(getStackTrace(3));
+
+// > {
+//     "fileName": "/leemons/packages/leemons/lib/leemons.js",
+//     "lineNumber": 182,
+//     "columnNumber": 5,
+//     "functionName": "start"
+//   }
+```
+
+:::caution NOTE
+This method is used to expose information only to certain calls.
+:::

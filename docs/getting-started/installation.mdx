@@ -1,0 +1,264 @@
+---
+sidebar_position: 1
+---
+
+import { Button, ThemeProvider, Stack } from '@bubbles-ui/components';
+import { DownloadIcon } from '@bubbles-ui/icons/outline';
+import ReactPlayer from 'react-player';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Installation
+
+Leemons is essentially a set of npm [packages](https://github.com/leemonade/leemons/tree/main/packages).
+
+## 1. Requirements
+
+### Node.js
+
+All the Leemons packages are built in Javascript, so you need to install [Node.js](https://nodejs.org/en/download/) in order to compile and run it.
+The version required is 16.14 or above, you can check it by running in your terminal:
+
+```bash
+node -v
+```
+
+You can use [nvm](https://github.com/nvm-sh/nvm) for managing multiple Node versions on a single machine installed.
+
+### Yarn
+
+We use [Yarn](https://classic.yarnpkg.com/en/docs/install) for managing dependencies, because of the way it handle `workspaces` in monorepos.
+
+Once you have [npm](#nodejs) installed you can run the following to install Yarn:
+
+```bash
+npm install --global yarn
+```
+
+## 2. Database
+
+Leemons will be prepared to support both SQL and NoSQL databases, but in the beta version we support only a SQL database.
+Follow the installation process for your preferred database:
+
+- MySQL [macOS](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/macos-installation.html) | [Windows](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/windows-installation.html) | [Linux](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/linux-installation.html) | [Linux](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/linux-installation.html)
+- PostgreSQL [macOS](https://www.postgresql.org/download/macosx) | [Windows](https://www.postgresql.org/download/windows) | [Linux](https://www.postgresql.org/download/linux)
+
+:::tip MACOS Users
+On macOS, you can install MySQL easily using [Homebrew](https://flaviocopes.com/homebrew).
+
+Run:
+
+```bash
+brew install mysql
+```
+
+and finally:
+
+```bash
+brew services start mysql
+```
+
+:::
+
+### Database setup
+
+Once the database engine is installed, a database must be created for use in Leemons.
+
+For the purposes of this documentation, we will always be working with the following database configuration:
+
+```json
+{
+  "host": "localhost",
+  "port": 3306,
+  "user": "leemons",
+  "password": "leemons",
+  "database": "leemons"
+}
+```
+
+<details>
+  <summary>MySQL</summary>
+
+Let's create a database named `leemons` in your existing MySQL installation. So, in your `mysql` console, run the following commands:
+
+```sql
+CREATE DATABASE IF NOT EXISTS `leemons` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'leemons'@'localhost' IDENTIFIED WITH mysql_native_password BY 'leemons';
+GRANT ALL PRIVILEGES ON leemons.* TO 'leemons'@'localhost';
+flush privileges;
+```
+
+</details>
+
+## 3. Download
+
+<Tabs>
+<TabItem value="direct" label="Direct" default>
+
+You can download the latest version of Leemons directly from Github.
+
+<Button
+  rightIcon={<DownloadIcon />}
+  onClick={() =>
+    window.open('https://github.com/leemonade/leemons/archive/refs/heads/main.zip', '_blank')
+  }
+>
+  Download Leemons
+</Button>
+
+</TabItem>
+<TabItem value="git" label="Clone with git">
+
+You need [git](https://git-scm.com/downloads) to be installed in your machine, you can check it by running in your terminal:
+
+```bash
+git --version
+```
+
+To clone the repository, you can use the following command:
+
+```bash
+git clone https://github.com/leemonade/leemons.git
+```
+
+</TabItem>
+</Tabs>
+
+### Project structure {#project-structure}
+
+Assuming you have already downloaded or cloneded Leemons to a directory named `my-leemons`, you will see the following minimal structure (we hide some folders and files for display purposes):
+
+```bash
+my-leemons
+├── examples
+│   └── demo
+├── packages
+│   ├── leemons
+│   ├── leemons-utils
+│   ├── leemons-database
+│   ├── leemons-plugin-academic-calendar
+│   ├── leemons-plugin-academic-portfolio
+│   ├── leemons-plugin-assignables
+│   ├── leemons-plugin-bulk-template
+│   ├── leemons-plugin-calendar
+│   ├── leemons-plugin-curriculum
+│   ├── leemons-plugin-dashboard
+│   ├── leemons-plugin-dataset
+│   ├── leemons-plugin-emails
+│   ├── leemons-plugin-grades
+│   ├── leemons-plugin-scores
+│   ├── leemons-plugin-tasks
+│   ├── leemons-plugin-tests
+│   ├── leemons-plugin-timetable
+│   ├── leemons-plugin-users
+│   └── leemons-react
+├── package.json
+└── yarn.lock
+```
+
+### Project structure rundown {#project-structure-rundown}
+
+- `/examples/` - Contains the applications examples.
+  - `/examples/demo/` - Contains the demo application we will use in this documentation.
+- `/packages/` - Contains all the [plugins](../category/plugins) and [packages](../category/packages) of Leemons.
+
+## 4. Database connection configuration
+
+You can set up the database connection configuration by creating a `.env` file inside the `my-leemons/examples/demo` folder like this:
+
+```bash title="/examples/demo/.env"
+DATABASE_DATABASE=leemons
+DATABASE_USERNAME=root
+DATABASE_PASSWORD=admin
+DATABASE_PORT=3306
+DATABASE_HOST=127.0.0.1
+```
+
+## 5. Bulk data creation template configuration
+
+While we finish developing our Welcome Wizard, Leemons allows you to install the platform thanks to our "Bulk Templates".
+
+These templates allow you to choose between three different programmes according to your needs and can be customized at a later stage.
+
+:::tip Download the template and see the tutorial
+The easiest way to understand how our template works is to watch this short video tutorial.
+:::
+
+- [Download the Spain Secundary School template](https://www.leemons.io/)
+- [Download the High School USA template](https://www.leemons.io/)
+- [Download the enterprise training courses template](https://www.leemons.io/)
+
+<ThemeProvider>
+  <ReactPlayer url="https://youtu.be/8giIiAq6qds" />
+</ThemeProvider>
+
+### Template file
+
+Once you have downloaded and completed the template file, rename it to `data.xlsx` and copy it to the folder:
+
+`my-leemons/packages/leemons-plugin-bulk-templates/src/bulk/data.xlsx`
+
+```bash
+my-leemons
+└── packages
+    └── leemons-plugin-bulk-template
+        └── src
+            └── bulk
+                └── data.xlsx
+```
+
+## 6. Dependencies
+
+Navigate to `my-leemons/examples/demo` folder and run the following command to install all the dependencies:
+
+```bash
+yarn install
+```
+
+## 7. Run your Leemons 🚀
+
+You need to launch 2 servers in order to run Leemons:
+
+### Backend server
+
+Still inside `my-leemons/examples/demo` folder, run the following command to start the demo application backend:
+
+```bash
+yarn dev
+```
+
+:::caution BE PATIENT
+Depending on the resources of your machine and the amount of template data to be uploaded, the bulk upload process can take between 15 and 20 minutes.
+:::
+
+If everything has gone well, the bulk data loading of the template will start and once completed, the following message will be displayed on the terminal:
+
+```bash
+BULK DONE Template loaded
+```
+
+#### Re-launch the application
+
+In order to check if everything has gone well, kill or close the current terminal and re-launch the application by running again `yarn dev`
+
+If everything has gone well, this time you will see the following message:
+
+```bash
+Listening on http://localhost:8080
+```
+
+### Frontend server
+
+In a new terminal, navigate to `my-leemons/examples/demo` folder again and run the following command to start the demo application frontend:
+
+```bash
+yarn front
+```
+
+:::caution IMPORTANT
+Don't kill or close your terminal while the servers are running, otherwise the servers will stop and the application will terminate.
+:::
+
+## 8. Test your Leemons 👩‍💻
+
+If everything has gone as expected, you can now test your Leemons application by opening the following URL in your browser [http://localhost:8080](http://localhost:8080)
