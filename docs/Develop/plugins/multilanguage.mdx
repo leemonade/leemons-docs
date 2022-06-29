@@ -1,0 +1,463 @@
+---
+sidebar_label: 'multilanguage'
+---
+
+# Multilanguage plugin
+
+## Languages
+
+English and Spanish are pre-installed by default.
+
+### Add language
+
+Returns the added language
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.locales.getProvider()
+  .add('es-ES', 'Español (España)');
+
+/**
+ * @return [{code: 'es-ES', name: 'Español (España)'}]
+ * */
+```
+
+### Add many languages
+
+Returns the array of languages we are adding
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.locales.getProvider()
+  .addMany([['es-ES', 'Español (España)']]);
+
+/**
+ * @return [{code: 'es-ES', name: 'Español (España)'}]
+ * */
+```
+
+### Edit language name
+
+Returns the modified language
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.locales.getProvider()
+  .setName('es-ES', 'Español (España) [es-ES]');
+
+/**
+ * @return {code: 'es-ES', name: 'Español (España) [es-ES]'}
+ * */
+```
+
+### Remove language
+
+Returns `true` if deleted, otherwise `false`.
+
+```js
+await leemons.getPlugin('multilanguage').services.locales.getProvider().delete('es-ES');
+
+/**
+ * @return boolean
+ * */
+```
+
+### Language exists
+
+Returns `true` if exists, otherwise `false`.
+
+```js
+await leemons.getPlugin('multilanguage').services.locales.getProvider().has('es-ES');
+
+/**
+ * @return boolean
+ * */
+```
+
+### Multiple languages exist
+
+Returns for each language whether it exists or not
+
+```js
+await leemons.getPlugin('multilanguage').services.locales.getProvider().hasMany(['es-ES', 'en']);
+
+/**
+ * @return { 'es-ES': true, 'en': false }
+ * */
+```
+
+### Retrieve language
+
+Returns the specified language if it exists, otherwise `null`.
+
+```js
+await leemons.getPlugin('multilanguage').services.locales.getProvider().get('es-ES');
+
+/**
+ * @return {code: 'es-ES', name: 'Español (España)'}
+ * */
+```
+
+### Retrieve multiple languages
+
+Return an array of the specified languages if they exist. If any do not exist, they will not be in the returned array.
+
+```js
+await leemons.getPlugin('multilanguage').services.locales.getProvider().getMany(['es-ES', 'en']);
+
+/**
+ * @return [
+ *      {code: 'es-ES', name: 'Español (España)'},
+ *      {code: 'en', name: 'English'}
+ * ]
+ * */
+```
+
+## Translations
+
+There are two ways of storing data, **_public_** and **_private_**.
+
+Everything is used the same, the only difference is that with **_private_** only your plugin will be able to access what you have stored.
+
+**Private:**
+
+```js
+await leemons.getPlugin('multilanguage').services.contents.getProvider();
+```
+
+**Public:**
+
+```js
+await leemons.getPlugin('multilanguage').services.common.getProvider();
+```
+
+:::caution ATTENTION
+From now on the keys have to follow the following format:
+
+`plugins.(name-of-your-plugin).(key-that-you-want-to-specify)`
+
+**EXAMPLE**
+
+If your plugin package is "leemons-plugin-users" and you want to set the "settings" key, it would look like this:
+
+`plugins.users.settings`
+:::
+
+:::caution CAUTION
+All values must be stored as a _string_ if passed as a value anything other than a _string_ will
+is not a _string_ will give an error.
+:::
+
+### Add translation
+
+Stores a text for your plugin for the specified language with the specified key
+
+```js
+const key = 'plugins.example.settings';
+const locale = 'es-ES';
+const value = 'configuración';
+
+await leemons.getPlugin('multilanguage').services.contents.getProvider().add(key, locale, value);
+
+/**
+ * @return {key, locale, value}
+ * */
+```
+
+### Add multiples translations to the same key
+
+Same as `.add`, but to store multiples translations to the same key in one call.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .addManyByKey('plugins.example.save', {
+    en: 'Save',
+    'es-ES': 'Guardar',
+    'es-MX': 'Salvar',
+  });
+
+/**
+ * @return [
+ *      {key: 'plugins.example.save', locale: 'en', value: 'Save'},
+ *      {key: 'plugins.example.save', locale: 'es-ES', value: 'Guardar'},
+ *      {key: 'plugins.example.save', locale: 'es-MX', value: 'Salvar'},
+ * ]
+ * */
+```
+
+### Add in bulk
+
+Add for many languages, many keys with their translations.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .addMany({
+    en: {
+      'plugins.example.save': 'Save',
+      'plugins.example.config': 'Settings',
+    },
+    'es-ES': {
+      'plugins.example.save': 'Guardar',
+      'plugins.example.config': 'Configuración',
+    },
+  });
+```
+
+### Edit translation
+
+Edits a translation by resetting its value.
+
+```js
+const key = 'plugins.example.settings';
+const locale = 'es-ES';
+const value = 'Configuración';
+
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .setValue(key, locale, value);
+
+/**
+ * @return {key, locale, value}
+ * */
+```
+
+### Edit multiple translations for the same key
+
+Same as `.setValue`, but to update multiple translations for the same key in one call.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .setKey('plugins.example.save', {
+    en: 'Save',
+    'es-ES': 'Guardar',
+    'es-MX': 'Salvar',
+  });
+
+/**
+ * @return [
+ *      {key: 'plugins.example.save', locale: 'en', value: 'Save'},
+ *      {key: 'plugins.example.save', locale: 'es-ES', value: 'Guardar'},
+ *      {key: 'plugins.example.save', locale: 'es-MX', value: 'Salvar'},
+ * ]
+ * */
+```
+
+### Edit in bulk
+
+Edits for many languages many keys with their translations.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .setMany({
+    en: {
+      'plugins.example.save': 'save',
+      'plugins.example.config': 'configuration',
+    },
+    'es-ES': {
+      'plugins.example.save': 'guardar',
+      'plugins.example.config': 'configuración',
+    },
+  });
+```
+
+### Remove translation for a language
+
+Removes the translation of that key for that language.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .delete('plugins.example.save', 'es-ES');
+
+/**
+ * @return boolean
+ * */
+```
+
+### Remove translation for all languages
+
+Removes all translations in all languages for the specified key.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .deleteAll({ key: 'plugins.example.save' });
+```
+
+### Remove translation for all languages where its key begins with a prefix
+
+Removes all translations, in all languages, for stored keys starting with the specified string.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .deleteKeyStartsWith('plugin.example');
+```
+
+### Translation exists
+
+Check if a translation exists for that key and language.
+
+```js
+const key = 'plugins.example.save';
+const locale = 'es-ES';
+
+await leemons.getPlugin('multilanguage').services.contents.getProvider().has(key, locale);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Translation count
+
+Returns the number of translations that exist for the specified key.
+
+```js
+const key = 'plugins.example.save';
+await leemons.getPlugin('multilanguage').services.contents.getProvider().countLocalesWithKey(key);
+
+/**
+ * @return number
+ * */
+```
+
+### Count translations by prefix and language
+
+Returns the number of translations that exist for that prefix in that language.
+
+```js
+const key = 'plugins.example';
+const locale = 'es-ES';
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .countKeyStartsWith(key, locale);
+
+/**
+ * @return number
+ * */
+```
+
+### Retrieve translation
+
+Returns the translation if it exists for the specified key and language.
+
+```js
+const key = 'plugins.example.save';
+const locale = 'es-ES';
+
+await leemons.getPlugin('multilanguage').services.contents.getProvider().get(key, locale);
+
+/**
+ * @return {key, locale, value: 'Guardar'}
+ * */
+```
+
+### Retrieve translations by key
+
+Given a key, return all translations in all available languages.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .getWithKey('plugins.example.save');
+
+/**
+ * @return [
+ *      {key: 'plugins.example.save', locale: 'es-ES', value: 'Guardar'},
+ *      {key: 'plugins.example.save', locale: 'en', value: 'Save'},
+ *      {key: 'plugins.example.save', locale: 'es-MX', value: 'Salvar'}
+ * ]
+ * */
+```
+
+### Retrieve value from translation
+
+Same as `.get`, but already returns the value.
+
+```js
+const key = 'plugins.example.save';
+const locale = 'es-ES';
+
+await leemons.getPlugin('multilanguage').services.contents.getProvider().getValue(key, locale);
+
+/**
+ * @return string Guardar
+ * */
+```
+
+### Retrieve values from translations per key
+
+Same as `.getWithKey`, but returns the value for each language.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .getLocaleValueWithKey('plugins.example.save');
+
+/**
+ * @return { 'es-ES': 'Guardar', 'en': 'Save', 'es-MX': 'Salvar' }
+ * */
+```
+
+### Retrieve translations by language
+
+Return all translations given a language.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .getKeyValueWithLocale('es-ES');
+
+/**
+ * @return { 'plugins.example.save': 'Guardar', 'plugins.example.config': 'Configuración' }
+ * */
+```
+
+```js
+await leemons.getPlugin('multilanguage').services.contents.getProvider().getWithLocale('es-ES');
+
+/**
+ * @return [
+ *      {key: 'plugins.example.save', locale: 'es-ES', value: 'Guardar'},
+ *      {key: 'plugins.example.config', locale: 'es-ES', value: 'Configuración'}
+ * ]
+ * */
+```
+
+### Retrieve translations by key prefix
+
+Returns all translations where the key begins with the specified text for the specified language.
+
+```js
+await leemons
+  .getPlugin('multilanguage')
+  .services.contents.getProvider()
+  .getKeyStartsWith('plugins.example', 'es-ES');
+
+/**
+ * @return [
+ *      {key: 'plugins.example.save', locale: 'es-ES', value: 'Guardar'},
+ *      {key: 'plugins.example.config', locale: 'es-ES', value: 'Configuración'}
+ * ]
+ * */
+```

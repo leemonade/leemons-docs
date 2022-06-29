@@ -1,0 +1,578 @@
+---
+sidebar_position: 1
+sidebar_label: 'dataset'
+---
+
+# Dataset plugin
+
+Datasets give you all the tools to easily extend your plugin schemas and forms.
+
+## Locations
+
+A location is a reference to the place in the plugin frontend where a dataset will be placed.
+
+### Add location
+
+Add a new location for a dataset and give it a `name` and `description` so that the admin can know that it is located in the frontend.
+
+```js
+const name = {
+  es: 'Datos adicionales del salón de clase',
+  en: 'Additional classroom data',
+};
+
+const description = {
+  es: 'El profesor debe indicar datos de personalización del salón.',
+  en: 'The teacher must provide custom data for the classroom.',
+};
+
+const locationName = 'register-classroom-data';
+const pluginName = 'plugins.classrooms';
+
+await leemons.getPlugin('dataset').services.dataset.addLocation({
+  name,
+  description,
+  locationName,
+  pluginName,
+});
+
+/**
+ * @return { name, description, locationName, pluginName }
+ * */
+```
+
+### Update location
+
+Update location name and description
+
+```js
+await leemons.getPlugin('dataset').services.dataset.updateLocation({
+  name,
+  description,
+  locationName,
+  pluginName,
+});
+
+/**
+ * @return { name, description, locationName, pluginName }
+ * */
+```
+
+### Delete location
+
+Deletes everything related to the location except the stored data.
+
+```js
+await leemons.getPlugin('dataset').services.dataset.deleteLocation(locationName, pluginName);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Location exists
+
+Check if the location exists
+
+```js
+await leemons.getPlugin('dataset').services.dataset.existLocation(locationName, pluginName);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Retrieve location
+
+If the location exists, the location is returned with its name and description.
+
+If you specify the language to be returned, the name and description will arrive already translated into the requested language if exists.
+
+If the language is not specified it will return the name and description as objects with all available languages.
+
+```js
+const locale = 'en';
+
+await leemons
+  .getPlugin('dataset')
+  .services.dataset.getLocation(locationName, pluginName, { locale });
+
+/**
+ * @return {
+ *      name: 'Additional classroom data',
+ *      description: 'The teacher must provide custom data for the classroom.',
+ *      locationName: 'register-classroom-data',
+ *      pluginName: 'plugins.classrooms'
+ * }
+ * */
+```
+
+## Schemas
+
+[react-jsonschema-form](https://github.com/rjsf-team/react-jsonschema-form)
+
+The schemas are composed of two configuration objects:
+
+- jsonSchema: where you define which fields the form will have and what conditions each field must fulfil to be valid.
+- jsonUI: how it has to be shown in the frontend (appearance).
+
+See some examples in [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form)
+
+### Adding a schema
+
+To add a schema you must first understand that the schema must support multiple languages, so you must have separate `schemas` and `texts` that can be translated into different objects, as the schema must always be the same regardless of the language, but the texts vary according to the language.
+
+**Let's add a basic schema/ui**
+
+For better understanding, let's assume we want to add these `schema` and `ui` in multiples languages.
+
+<details>
+  <summary>Show wrong schemas (English hardcoded)</summary>
+
+```js
+const jsonSchema = {
+  title: 'A registration form',
+  description: 'A simple form example.',
+  type: 'object',
+  required: ['firstName', 'lastName'],
+  properties: {
+    firstName: {
+      type: 'string',
+      title: 'First name',
+      default: 'Chuck',
+    },
+    lastName: {
+      type: 'string',
+      title: 'Last name',
+    },
+    age: {
+      type: 'number',
+    },
+    telephone: {
+      type: 'string',
+      title: 'Telephone',
+      minLength: 10,
+    },
+  },
+};
+
+const jsonUI = {
+  firstName: {
+    'ui:autofocus': true,
+    'ui:emptyValue': '',
+    'ui:autocomplete': 'family-name',
+  },
+  lastName: {
+    'ui:emptyValue': '',
+    'ui:autocomplete': 'given-name',
+  },
+  age: {
+    'ui:widget': 'updown',
+    'ui:title': 'Age of person',
+    'ui:description': '(earthian year)',
+  },
+  telephone: {
+    'ui:options': {
+      inputType: 'tel',
+    },
+  },
+};
+```
+
+</details>
+
+Note that if we do so, we will no longer be able to display data entry forms in multiple languages.
+
+What we need to do is to create the `schemas` using translation "keys", and then add the translations in the languages we need.
+
+<details>
+  <summary>Show good schemas (Translation keys)</summary>
+
+```js
+const jsonSchema = {
+  title: '{{it.title}}',
+  description: '{{it.description}}',
+  type: 'object',
+  required: ['firstName', 'lastName'],
+  properties: {
+    firstName: {
+      type: 'string',
+      title: '{{it.properties.firstName.title}}',
+      default: '{{it.properties.firstName.default}}',
+    },
+    lastName: { type: 'string', title: '{{it.properties.lastName.title}}' },
+    age: { type: 'number' },
+    telephone: {
+      type: 'string',
+      title: '{{it.properties.telephone.title}}',
+      minLength: 10,
+    },
+  },
+};
+
+const jsonUI = {
+  firstName: {
+    'ui:autofocus': true,
+    'ui:emptyValue': '',
+    'ui:autocomplete': 'family-name',
+  },
+  lastName: { 'ui:emptyValue': '', 'ui:autocomplete': 'given-name' },
+  age: {
+    'ui:widget': 'updown',
+    'ui:title': '{{it.age.ui_title}}',
+    'ui:description': '{{it.age.ui_description}}',
+  },
+  telephone: { 'ui:options': { inputType: 'tel' } },
+};
+```
+
+</details>
+
+Finally, add the `schemas` and `translations` to the location.
+
+```js
+const locationName = 'register-classroom-data';
+const pluginName = 'plugins.classrooms';
+
+// Add the Schemas
+await leemons.getPlugin('dataset').services.dataset.addSchema({
+  jsonSchema,
+  jsonUI,
+  locationName,
+  pluginName,
+});
+
+// Add the translations
+const schemaTranslation = {
+  title: 'A registration form',
+  description: 'A simple form example.',
+  properties: {
+    firstName: { title: 'First name', default: 'Chuck' },
+    lastName: { title: 'Last name' },
+    telephone: { title: 'Telephone' },
+  },
+};
+
+const uiTranslation = {
+  age: { ui_title: 'Age of person', ui_description: '(earthian year)' },
+  password: { ui_help: 'Hint: Make it strong!' },
+};
+const locale = 'en';
+
+await leemons.getPlugin('dataset').services.dataset.addSchemaLocale({
+  locationName,
+  pluginName,
+  schemaTranslation,
+  uiTranslation,
+  locale,
+});
+```
+
+:::info NOTE
+We use [squirrelly.js](https://squirrelly.js.org/) to compile the schema with translations. Check out its documentation for more information.
+:::
+
+### Update schema
+
+Same as `.addSchema`. Throw an error if no schema is found.
+
+```js
+await leemons.getPlugin('dataset').services.dataset.updateSchema({
+  jsonSchema,
+  jsonUI,
+  locationName,
+  pluginName,
+});
+
+/**
+ * @return {jsonSchema, jsonUI, locationName, pluginName}
+ * */
+```
+
+### Delete schema
+
+Delete all schemas and translations for a given location.
+
+```js
+await leemons.getPlugin('dataset').services.dataset.deleteSchema(locationName, pluginName);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Schema exists
+
+Check if the schema exists for a given location.
+
+```js
+await leemons.getPlugin('dataset').services.dataset.existSchema(locationName, pluginName);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Retrieve schema
+
+Returns the schema if it exists
+
+```js
+await leemons.getPlugin('dataset').services.dataset.getSchema(locationName, pluginName);
+
+/**
+ * @return {jsonSchema, jsonUI, locationName, pluginName}
+ * */
+```
+
+### Retrieve schema compiled to a language
+
+If the schema and the translation exist, compile the schema and return it.
+
+```js
+const locale = 'en';
+
+await leemons
+  .getPlugin('dataset')
+  .services.dataset.getSchemaWithLocale(locationName, pluginName, locale);
+
+/**
+ * @return {
+ *      jsonSchema,
+ *      jsonUI,
+ *      locationName,
+ *      pluginName,
+ *      schemaData,
+ *      uiData,
+ *      compileJsonSchema,
+ *      compileJsonUI
+ * }
+ * */
+```
+
+### Add schema translation
+
+Add schema data for a particular language
+
+```js
+const locale = 'en';
+
+await leemons.getPlugin('dataset').services.dataset.addSchemaLocale({
+  locationName,
+  pluginName,
+  schemaData,
+  uiData,
+  locale,
+});
+
+/**
+ * @return {locationName, pluginName, schemaData, uiData, locale}
+ * */
+```
+
+### Update schema translation
+
+Same as `.addSchemaLocale `. Throw an error if no translation is found.
+
+```js
+const locale = 'en';
+
+await leemons.getPlugin('dataset').services.dataset.updateSchemaLocale({
+  locationName,
+  pluginName,
+  schemaData,
+  uiData,
+  locale,
+});
+
+/**
+ * @return {locationName, pluginName, schemaData, uiData, locale}
+ * */
+```
+
+### Delete schema translation
+
+Delete a translation for a schema
+
+```js
+const locale = 'en';
+
+await leemons
+  .getPlugin('dataset')
+  .services.dataset.deleteSchemaLocale({ locationName, pluginName, locale });
+
+/**
+ * @return boolean
+ * */
+```
+
+### Schema translation exists
+
+Check if the schema translation exists.
+
+```js
+const locale = 'en';
+
+await leemons
+  .getPlugin('dataset')
+  .services.dataset.existSchemaLocale(locationName, pluginName, locale);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Retrieve schema translations
+
+Return translations of the schema if it exists in the requested language.
+
+```js
+const locale = 'en';
+
+await leemons
+  .getPlugin('dataset')
+  .services.dataset.getSchemaLocale(locationName, pluginName, locale);
+
+/**
+ * @return {locationName, pluginName, schemaData, uiData, locale}
+ * */
+```
+
+## Utilities
+
+### Transform final schema into schema and translation
+
+It is passed a schema from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and returns two objects, one the schema to be compiled with [squirrelly.js](https://squirrelly.js.org/) and another with the texts to be stored as translation.
+
+```js
+await leemons.getPlugin('dataset').services.dataset.transformJsonSchema(jsonSchema);
+
+/**
+ * @return {
+    values, // Values to be stored as translation
+    json, // Schema in [squirrelly.js] format
+  }
+ * */
+```
+
+### Transform final schema ui into ui and translation
+
+Pass a ui from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and return two objects one the ui to compile with [squirrelly.js](https://squirrelly.js.org/) and another with the texts to store them as translation.
+
+```js
+await leemons.getPlugin('dataset').services.dataset.transformUiSchema(jsonSchema);
+
+/**
+ * @return {
+    values, // Values to be stored as translation
+    json, // Schema in [squirrelly.js] format
+  }
+ * */
+```
+
+## Values
+
+### Add values
+
+Stores the values of a dataset form, validating them to schema conditions.
+
+Optionally these values can be linked to whatever you want.
+
+For example, we are going to store extra data for a user and we want to link that data to that user to retrieve it later. For that we use the optional `target` parameter where we specify (in this case) the user id.
+
+```js
+const target = 'user-id';
+const formData = {
+  firstName: 'Chuck',
+  lastName: 'Norris',
+  telephone: '1234567890',
+};
+
+await leemons.getPlugin('dataset').services.dataset.addValues(
+  locationName,
+  pluginName,
+  formData,
+  { target } // Optional
+);
+
+/**
+ * @return formData
+ * */
+```
+
+### Update values
+
+Same as `.addValues`. Throw an error if no values is found.
+
+```js
+const target = 'user-id';
+const formData = {
+  firstName: 'Chuck',
+  lastName: 'Norris',
+  telephone: '0000',
+};
+
+await leemons.getPlugin('dataset').services.dataset.updateValues(
+  locationName,
+  pluginName,
+  formData,
+  { target } // Optional
+);
+
+/**
+ * @return formData
+ * */
+```
+
+### Delete values
+
+Deletes all values if they match the criteria.
+
+```js
+const target = 'user-id';
+
+await leemons.getPlugin('dataset').services.dataset.deleteValues(
+  locationName,
+  pluginName,
+  { target } // Optional
+);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Values exist
+
+Check if values exist.
+
+```js
+const target = 'user-id';
+
+await leemons.getPlugin('dataset').services.dataset.existValues(
+  locationName,
+  pluginName,
+  { target } // Optional
+);
+
+/**
+ * @return boolean
+ * */
+```
+
+### Retrieve values
+
+When retrieving stored values you can decide whether to retrieve only some of the keys or all of them.
+
+```js
+const keys = ['name', 'surname'];
+
+await leemons.getPlugin('dataset').services.dataset.getValues(locationName, pluginName, {
+  target, // Optional
+  keys, // Optional
+});
+
+/**
+ * @return {name: 'string', surname: 'string'}
+ * */
+```

@@ -1,0 +1,494 @@
+---
+sidebar_position: 3
+sidebar_label: 'leemons-connector-bookshelf'
+---
+
+# Bookshelf Connector package
+
+The `leemons-connector-bookshelf` package is a SQL abstraction layer, which will be in charge of managing connections and queries to the database.
+
+To perform this abstraction, we use the [bookshelf.js](https://bookshelfjs.org) ORM and the [knex.js](https://knexjs.org) query builder.
+
+## Initialization
+
+When the connector is initialized, it connects leemons with each of the specified database connections.
+
+- What database engines are supported?
+
+  Currently we have tested compatibility with [MySql](https://www.mysql.com/), [PostgreSQL](https://www.postgresql.org/) and [SQLite3](https://sqlite.org/).
+
+- But how does it work?
+
+  Well, the first thing to do is to initialize a knex object with the database connection data, once everything is ready, we proceed to create the schema from the models provided. During the creation of the schema, the relationships between tables are created and the bookshelf models are instantiated to manage the queries.
+
+## Models Generation
+
+To generate the database, the first thing to do is to check the current database schema, which we do as follows:
+
+1. The [user-defined models](leemons/#models) are obtained.
+2. A transaction is started to keep an open thread and to be able to return to the previous state in case of failure.
+3. For each model defined, a check is made to see if a corresponding table exists in the database.
+4. It is checked if the model has been altered since the previous execution, which is stored in the `core_store`.
+5. The tables that need it are created or modified (based on points 2 and 3).
+6. The [bookshelf model](https://bookshelfjs.org/api.html#Bookshelf-instance-model) is generated.
+7. The foreign keys are created.
+
+## Definition of templates
+
+The models are used to define the structure of your tables, for this it is necessary to [define them](leemons/#models) as indicated in the leemons documentation.
+
+Next, you must define the different columns that your table is going to have, this is done in the `attributes` property being able to choose one of the defined [data types](#datatypes) or set a [specific type](#specific-datatypes), next to these, we can specify some [options per data](#options). Instead of a data, you can define a relationship with another table, this is achieved by the [relationship declaration](#relationship-relationship-between-tables).
+
+For example: In the users table we have the fields: first name, last name and course.
+
+```json
+{
+  "modelName": "users",
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "surnames": {
+      "type": "string"
+    },
+    "course": {
+      "type": "integer"
+    }
+  }
+}
+```
+
+### Data types {#datatypes}
+
+We have selected most of the data types provided by Knex.js, trying to get the most efficient data types to be used, these are the following:
+
+<details>
+<summary>string</summary>
+
+[string](https://knexjs.org/guide/schema-builder.html#string)
+
+Specifies the use of strings of the specified length (default 255 characters).
+
+```json
+{
+  "attributes": {
+    "name": {
+      "type": "string",
+      "length": 255
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>text/richtext</summary>
+
+[text/richtext](https://knexjs.org/guide/schema-builder.html#text)
+
+Specifies the use of strings with a variable determined by SQL, this type is more efficient for long texts (default 65535 characters).
+
+```json
+{
+  "attributes": {
+    "name": {
+      "type": "text",
+      "textType": "text" // possible values: "mediumtext" y "longtext"
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>enum/enu/enumeration</summary>
+
+[enum/enu/enumeration](https://knexjs.org/guide/schema-builder.html#enum-enu)
+
+Defines the possible values that a field can accept:
+
+```json
+{
+  "attributes": {
+    // role can be only student, teacher or admin.
+    "role": {
+      "type": "enum",
+      "enum": ["student", "teacher", "admin"]
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>json/jsonb</summary>
+
+[json/jsonb](https://knexjs.org/guide/schema-builder.html#json)
+
+It allows to use the database engine's own JSON data type, thus obtaining some extra functionalities from the engine.
+
+```json
+{
+  "attributes": {
+    // `metadata` can be a json that allows more efficient
+    // queries to certain properties of the metadata.
+    "metadata": {
+      "type": "json"
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>int/integer</summary>
+
+[int/integer](https://knexjs.org/guide/schema-builder.html#integer)
+
+Specifies that the data is a number.
+
+```json
+{
+  "attributes": {
+    "course": {
+      "type": "int"
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>bigint/biginteger</summary>
+
+[bigint/biginteger](https://knexjs.org/guide/schema-builder.html#biginteger)
+
+You can also use larger numbers (they have a much higher limit).
+
+```json
+{
+  "attributes": {
+    // A number that is so large that in JavaScript
+    // must be treated as a string.
+    "bigInt": {
+      "type": "bigInt"
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>float</summary>
+
+[float](https://knexjs.org/guide/schema-builder.html#float)
+
+Allows to declare a float with a precision and a scale.
+
+```json
+{
+  "attributes": {
+    "evaluation": {
+      "type": "float",
+      "precision": 8,
+      "scale": 2
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>decimal</summary>
+
+[decimal](https://knexjs.org/guide/schema-builder.html#decimal)
+
+Allows to declare a decimal number with a precision and a scale.
+
+```json
+{
+  "attributes": {
+    "evaluation": {
+      "type": "decimal",
+      "precision": 8,
+      "scale": 2
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>binary</summary>
+
+[binary](https://knexjs.org/guide/schema-builder.html#binary)
+
+Sets a binary field with a specified length.
+
+```json
+{
+  "attributes": {
+    "file": {
+      "type": "binary",
+      "length": 255
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>boolean</summary>
+
+[boolean](https://knexjs.org/guide/schema-builder.html#boolean)
+
+Sets a boolean field (true or false)
+
+```json
+{
+  "attributes": {
+    "attendance": {
+      "type": "boolean"
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>uuid</summary>
+
+[uuid](https://knexjs.org/guide/schema-builder.html#uuid)
+
+Allows to declare a UUID (Universally Unique Identifier).
+
+```json
+{
+  "attributes": {
+    "user_id": {
+      "type": "uuid"
+    }
+  }
+}
+```
+
+</details>
+
+### Options
+
+In addition to specifying the data type, we can specify some more concrete options within the attribute with the `options` property, there are the following options:
+
+<details>
+  <summary>unique</summary>
+
+[unique](https://knexjs.org/guide/schema-builder.html#unique)
+
+Indicates whether the column should have a unique value throughout the table.
+
+```json
+{
+  "attributes": {
+    "title": {
+      "type": "string",
+      "options": {
+        "unique": true
+      }
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>defaultTo</summary>
+
+[defaultTo](https://knexjs.org/guide/schema-builder.html#defaultto)
+
+Indicates the default value in case no value is specified in the insertion.
+
+```json
+{
+  "attributes": {
+    // If no role is specified, it is filled as 'student'.
+    "role": {
+      "type": "string",
+      "options": {
+        "defaultTo": "student"
+      }
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>unsigned</summary>
+
+[unsigned](https://knexjs.org/guide/schema-builder.html#unsigned)
+
+Indicates whether the field value should be signed or unsigned (applicable for numeric values).
+
+```json
+{
+  "attributes": {
+    // In this case positive numerical values are accepted (>= 0).
+    "id": {
+      "type": "int",
+      "options": {
+        "unsigned": true
+      }
+    }
+  }
+}
+```
+
+</details>
+<details>
+<summary>notNull/notNullable</summary>
+
+[notNull/notNullable](https://knexjs.org/guide/schema-builder.html#notnullable)
+
+Specifies whether the field can (true) or cannot be null (false) (default is can (false)).
+
+```json
+{
+  "attributes": {
+    // Email is required (cannot be null)
+    "email": {
+      "type": "string",
+      "options": {
+        "notNull": true
+      }
+    },
+    // While the phone is optional (can be null)
+    "phone": {
+      "type": "int",
+      "options": {
+        "notNull": false
+      }
+    }
+  }
+}
+```
+
+</details>
+
+### Specific data types {#specific-datatypes}
+
+If you prefer to use a non-provided data type, you can also use a more specific one by using the `specificType` property following [Knex.js instructions](https://knexjs.org/guide/schema-builder.html#specifictype)
+
+### Relationships between tables
+
+In certain occasions you will need to relate several tables, we have made it as easy as possible without losing the original essence, for it, instead of defining a type in an attribute of the table, you define a reference:
+
+Let's see how you would define a relationship between the users and roles table.
+
+```json
+{
+  "modelName": "users",
+  "attributes": {
+    "roles": {
+      "references": {
+        "collection": "roles"
+      }
+    }
+  }
+}
+```
+
+#### Relationships
+
+Relationships between tables are a very important feature in SQL databases, they allow you to create relationships between data avoiding redundancy as much as possible.
+
+If you have already worked with SQL you will already know the different relationships. Here are the different relationships and how to establish them:
+
+<details>
+  <summary>one-to-one</summary>
+
+In this type of relationship, **one data** in a table A is directly related to **one data** in another table B, moreover, there can only be one relationship for each data in table A and only one for each data in table B. In this type of relation it is said that a data belongs to another one.
+
+For example: a student has a locker and a locker belongs to only one student. As the locker belongs to the student, it will be this table that creates the relationship, in the locker table the relationship is not specified.
+
+```json
+{
+  "modelName": "students",
+  "attributes": {
+    "locker": {
+      // It could be read as: a locker belongs to a single student.
+      "references": {
+        "collection": "lockers",
+        "relation": "one to one"
+      }
+    }
+  }
+}
+```
+
+**What is going on inside?**
+
+On the inside, a field is being created in the students table called "locker" (as specified), this is a foreign key of the "lockers" table, in addition, a unique key is created to preserve uniqueness.
+
+</details>
+<details>
+<summary>one-to-many</summary>
+
+The one-to-many relationship directly relates **one data** in a table A with **several** in a table B, there can be as many relationships for each data in A as there are data in B, but each data in B can only relate to one in A.
+
+For example: a student belongs to a single class, but a class belongs to several students. In this case, it would be the class that has the one-to-many relationship, but trying to keep all the relationships in the same table, it would be the student table that creates the relationship.
+
+```json
+{
+  "modelName": "students",
+  "attributes": {
+    "classroom": {
+      // It could be read as: a classroom has several students
+      "references": {
+        "collection": "classrooms",
+        "relation": "one to many"
+      }
+    }
+  }
+}
+```
+
+**What is going on inside?**
+
+On the back end a field is being created in the students table called "class" (as specified), this is a foreign key of the "classes" table.
+
+</details>
+<details>
+<summary>many-to-many</summary>
+
+Finally, you may have situations where **several data** in table A are related to **several data** in table B. In this case, a third table is needed to store the relationships.
+
+For example: A student can be enrolled in several subjects, and in turn, a subject can be given by several students, in this case it is irrelevant who declares the relationship, but as always, we recommend to create as many relationships as possible in the same model.
+
+```json
+{
+  "modelName": "students",
+  "attributes": {
+    "subject": {
+      // It could be read as: several students attend several subjects
+      "references": {
+        "collection": "subjects",
+        "relation": "many to many"
+      }
+    }
+  }
+}
+```
+
+**What is going on inside?**
+
+Inside a table is created that contains a foreign key to the other two tables, thus being a join table, this table stores the relationships between the other two tables.
+
+</details>
+
+:::tip TIP
+When deciding who should define the relationship, always take the following guideline:
+
+- The second table you mention usually declares the relationship (a locker belongs to a single student).
+- Should always choose to have as many relationships as possible in the same table, so it is advisable to start declaring the relationships in the order: `one-to-many`, `one-to-one` and finally `many-to-many`.
+- The `one-to-many` are usually declared in the many table and not in the one table (many students in a class, one class many students. Always in the students table).
+
+:::

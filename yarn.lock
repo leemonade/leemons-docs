@@ -1205,6 +1205,11 @@
   resolved "https://registry.yarnpkg.com/@bubbles-ui/icons/-/icons-1.0.25.tgz#fccdadd32a9262470a2bfd1224eae100f660e2c7"
   integrity sha512-uT5LBjFLMG1YAANJmr/cBOAbnjoY10WKWz37vbD8NmFRAffbR5P1dQzcD6GstvBPcT/I3PvnCbJ7loxuuLg1fg==
 
+"@bubbles-ui/icons@^1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@bubbles-ui/icons/-/icons-1.0.26.tgz#e89d03569d4266ac1e1e5dd1cc699ab038fdf88b"
+  integrity sha512-1it2XK1MLUQ29IFtdbIqObj2M+O4j/Kbs8mDZ60E0+YxKX2e/SG6owU8F9ewWIiXWaTNASuIQzbWa723mPtZgA==
+
 "@bubbles-ui/leemons@^1.0.37":
   version "1.0.37"
   resolved "https://registry.yarnpkg.com/@bubbles-ui/leemons/-/leemons-1.0.37.tgz#6483fbba9ac3b8619b3b13cba319a112f7ebbd4a"

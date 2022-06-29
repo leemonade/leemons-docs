@@ -1,0 +1,72 @@
+---
+sidebar_position: 1
+---
+
+# Development stack
+
+Leemons is developed in a modular way, composed of [Plugins](../category/plugins), so our technology stack is divided into 4 big layers:
+
+## 1. Presentation layer {#front-layer}
+
+The presentation layer is executed using browser standards, HTML, Javascript and CSS.
+
+The frameworks used to implement this are described below.
+
+### Frontend
+
+- [**ReactJS**](https://reactjs.org/). We use it as a Javascript development framework.
+- [**EmotionJS.**](https://emotion.sh/). In Leemons we don't use CSS styles directly, but we use the JSS authoring system, which allows us to apply styles from Javascript.
+
+### Static bundling & serving
+
+- [**Webpack**](https://webpack.js.org). We use webpack as a tool for transpiling, packaging and optimising the final files generated for development and production. It also serves as a frontend development server.
+
+## 2. Application Layer & APIs {#app-layer}
+
+It is the layer for processing business logic with persistent data, as well as for orchestration between the different plugins that compose Leemons.
+
+The technologies used in this layer are described below.
+
+### Core & API Gateway
+
+- [**NodeJS**](https://nodejs.org). Javascript execution environment, which allows us to develop all the layers of the application in the same language.
+- [**KoaJS**](https://koajs.com). Web framework that allows us to develop the API gateway between plugins, making the most of asynchronous functions and improving error handling.
+
+### Handling connections
+
+- [**Haproxy**](https://www.haproxy.org). Used in deployments, it is a reverse proxy that allows us to map the different ports used by Leemons.
+- [**LetsEncrypt**](https://letsencrypt.org). Used in deployments, it is a free SSL certificate generation service.
+
+## 3. Data layer
+
+Due to the modularity of Leemons, we understand that different plugins may have different needs for persisting data.
+
+This layer has the flexibility of connectivity to different database engines.
+
+### Data access
+
+- [**KnexJS**](https://knexjs.org). It allows us to map models, from relational SQL databases, to schemas to work with, thus supporting the most widely used databases: PostgreSQL, MySQL, and SQLite3.
+- [**BookshelfJS**](https://bookshelfjs.org/). It facilitates work on KnexJS, providing transaction support, relationship loading, polymorphic associations and support for `one-to-one`, `one-to-many` and `many-to-many` relationships on relational databases.
+- [**Mongoose**](https://mongoosejs.com/). It allows us to map NoSQL MongoDB database models to support this non-relational database.
+
+### Data caching
+
+- [**Redis**](https://redis.io). High-performance in-memory data storage, which we use to cache endpoint responses.
+
+## 4. Communication layer
+
+To facilitate communication between plugins, Leemons not only provides communication between plugins via APIs, but also provides the possibility to connect via a message queue.
+
+In addition, this gives us the possibility to implement plugins that interconnect users at different points in real time.
+
+For this, we used the following:
+
+- [**SocketIO**](https://socket.io/). It allows the establishment of a bidirectional channel between the server [Application Layer](#app-layer) and the client [Application Layer](#app-layer) or [Presentation Layer](#front-layer) with a WebSocket connection whenever possible, or alternatively HTTP long-polling.
+
+---
+
+## Layers diagram
+
+<a href="/leemons-layers-diagram.pdf" target="_blank">
+  <img src="/img/sys-diagram.png" alt="Layers diagram" />
+</a>

@@ -4,83 +4,60 @@ slug: /
 ---
 # Overview
 
-# What is Leemons?
+## What is Leemons?
 
 Leemons is an open source platform that offers a next-generation Learning Experience, based on modular plugins in order to allow developers to extend the platform functionality.
 
-Leemons use a modern headless framework based on React, Next.js, Koa, NodeJS and Redis.
+Leemons use a modern headless framework based on NodeJS, Koa and React.
 
 Beyond architecture, Leemons offers a suite of first-class features that make it easy to developers, admins, teachers and students.
 
-# Core features
+## Core features
 
 Leemons architecture enables a several key features, available today:
 
-- Rapid deployment system on AWS
+- Rapid deployment system based on plugins.
 - Welcome wizard installation from zero for super-admins (with the basics to setup the platform)
 - Leemons Demos, a collection of Docker images with demo data in order to test the full functionality (including primary, secondary and high school programs), with realistic users, activities and resources.
 - Creation of users with invitation mails, recover passwords, etc…
-- Support for role-based access control (RBAC) and single sign-on (SSO) for secure user management and authentication.
+- Support for role-based access control (RBAC) for secure user management and authentication.
 - Support of multi-profile roles and custom profile configuration. The platform provides by default four basic profiles (that you could extend or create new ones):
-    - Super-admin
-    - Admin
-    - Teacher
-    - Student
+  - Super-admin
+  - Admin
+  - Teacher
+  - Student
 - Multi-language support, with modular dictionaries for each plugin or module.
 
-# Core plugins included
+## Core plugins included
 
-## Dashboards
+### Dashboards
 
 Main and subject dashboards: allow to manage the learning experience from one place with total coherence.
 
-## Activities
+### Activities
 
 - Creation and assignation of two types of activities:
-    - Test (including mono-response with images) and maps.
-    - Tasks (including submission of files or links).
+  - Test (including mono-response with images) and maps.
+  - Tasks (including submission of files or links).
 - Multi-subject tasks (allowing teacher to create tasks for more than one subject at the same time and release independent scores/grades).
 - Evaluation system to scoring/grade activities (including multi subject evaluation).
 
-## Calendar
+### Calendar
 
 With subjects filters and automatic creation of events related to activities (includes invitation for other users).
 
-## Kanban
+### Kanban
 
 With subjects filters and automatic creation of tasks related to activities (includes sub-task management and invitation for other users).
 
-## Library
+### Library
 
 An astonishing main Library with all the assets created in only one place with support to media files, documents, bookmarks and activities (includes sharing permissions).
 
-## Academic Portfolio
+### Academic Portfolio
 
 It allows you to create and manage your academic programs or courses and enroll students.
 
-## Academic Rules
+### Academic Rules
 
 It allows you to create academic rules and evaluation systems for each of your programs.
-
----
-
-# Architecture
-
-The following diagram outlines how the Control Plane, Data Plane, and users are connected to enable these features:
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a66c72a6-ffa9-4d8c-9822-1a89c513490c/Untitled.png)
-
----
-
-# Get Started
-
-The Leemons team recommends reading the following topics:
-
-- [Install the Leemons CLI](https://www.leemons.io/)
-- [Develop Project](https://www.leemons.io/)
-- [Configure your Deployment](https://www.leemons.io/)
-
-If you have a feature request or a bug to report, reach out to [Leemons](https://www.leemons.io/) Support. We're here to help.
-
-To check on the operational status of Leemons, visit our [status page](https://www.leemons.io/). You can subscribe to updates by clicking on Subscribe to Updates on the top-right of the page and entering your email address.
-

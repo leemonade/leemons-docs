@@ -26,12 +26,17 @@
   font-family: 'Lexend', sans-serif;
 }
 
+.markdown h1:first-child {
+  --ifm-h1-font-size: 2.5rem;
+}
+
 .menu__link {
   font-size: 0.95em;
   font-weight: 900;
 }
 
-.theme-doc-sidebar-item-link-level-2.menu__list-item .menu__link {
+.theme-doc-sidebar-item-link-level-2.menu__list-item .menu__link,
+.theme-doc-sidebar-item-link-level-3.menu__list-item .menu__link {
   padding-left: 30px;
   font-weight: 400;
   font-family: 'Inter', sans-serif;
