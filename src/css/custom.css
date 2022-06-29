@@ -22,6 +22,22 @@
   --ifm-navbar-link-color: #fff;
 }
 
+.navbar-sidebar__item.menu {
+  background-color: white;
+}
+
+[data-theme='dark'] .navbar-sidebar__item.menu {
+  background-color: transparent;
+}
+
+.clean-btn.navbar-sidebar__back {
+  color: #666666 !important;
+}
+
+[data-theme='dark'] .clean-btn.navbar-sidebar__back {
+  color: white !important;
+}
+
 .navbar__title {
   font-family: 'Lexend', sans-serif;
 }
