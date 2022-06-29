@@ -120,6 +120,13 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
+      metadata: [
+        {
+          property: 'og:image',
+          content:
+            'https://s3.eu-west-1.amazonaws.com/global-assets.leemons.io/Logo_1200x620_B_bc44bfa5fe.png',
+        },
+      ],
     }),
 };
 
