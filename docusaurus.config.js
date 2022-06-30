@@ -10,7 +10,7 @@ const config = {
   tagline: 'The powerful flexible friendly Learning Experience Platform you’re waiting for',
   url: 'https://docs.leemons.io',
   baseUrl: '/leemons-docs/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
 
