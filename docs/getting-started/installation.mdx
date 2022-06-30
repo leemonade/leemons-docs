@@ -242,7 +242,10 @@ To download the excell file, please go to File > Download > Microsoft Excell (.x
 - [Corporate Training Spreadsheet](https://docs.google.com/spreadsheets/d/1bdlTh5fIbGDjza1w85tvuqBA8W8tOZ10NPqXqqWrT_w/edit?usp=sharing)
 
 <Box mb={40}>
-  <ReactPlayer url="https://youtube.com/playlist?list=PLKpBzQRIcGB8RIExOHZyvwH9Aki7Hed0e" controls />
+  <ReactPlayer
+    url="https://youtube.com/playlist?list=PLKpBzQRIcGB8RIExOHZyvwH9Aki7Hed0e"
+    controls
+  />
 </Box>
 
 :::tip ALL CENTERS
@@ -289,7 +292,7 @@ yarn install
 
 You need to launch 2 servers in order to run Leemons:
 
-### Backend server
+### Core server
 
 Still inside `my-leemons/examples/demo` folder, run the following command to start the demo application backend:
 
@@ -306,6 +309,10 @@ If everything has gone well, the bulk data loading of the template will start an
 ```bash
 BULK DONE Template loaded
 ```
+
+:::note MAIN URL
+The main URL of your Leemons application is `http://localhost:8080/`.
+:::
 
 #### Re-launch the application
 
@@ -325,10 +332,18 @@ In a new terminal, navigate to `my-leemons/examples/demo` folder again and run t
 yarn front
 ```
 
+If everything has worked, the following message will appear on the terminal:
+
+```bash
+Serving!
+
+- Local: http://localhost:3000
+```
+
 :::caution IMPORTANT
 Don't kill or close your terminal while the servers are running, otherwise the servers will stop and the application will terminate.
 :::
 
 ## 8. Test your Leemons 👩‍💻
 
-If everything has gone as expected, you can now test your Leemons application by opening the following URL in your browser [http://localhost:8080](http://localhost:8080)
+Once the frontend server ir running, test your Leemons application by opening the main URL [http://localhost:8080](http://localhost:8080) in your browser.
