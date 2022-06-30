@@ -46,6 +46,16 @@
   --ifm-h1-font-size: 2.5rem;
 }
 
+.markdown h2 {
+  --ifm-h2-font-size: 1.8rem;
+  border-bottom: 1px solid #ddd;
+  line-height: 1.5;
+}
+
+.markdown h3 {
+  --ifm-h3-font-size: 1.4rem;
+}
+
 .menu__link {
   font-size: 0.95em;
   font-weight: 900;
