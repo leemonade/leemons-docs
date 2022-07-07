@@ -169,6 +169,7 @@ In Leemons for Docker, you will only need to set up the database, and we will ke
 
 To provide the database config, you must create the following file:
 
+
 ```json title=/examples/docker/.env
 DATABASE_DATABASE=leemons
 DATABASE_USERNAME=leemons
@@ -185,13 +186,13 @@ You can change the name, username and password.
 
 ## 5. Run your Leemons 🚀{#runYourLeemons}
 
-The deployed directory will be DIRECTORY, but you must go to DOCKER DIRECTORY and run the docker app.
+The deployed directory will be `my-leemons/examples/docker`, but you must go to `my-leemons/docker` and run the docker app.
 
 <Tabs>
 <TabItem value="linux" label="macOS and Linux" default>
 The installation For macOS and Linux is as easy as running from the terminal:
 
-The directory must be `/docker`.
+The directory must be `my-leemons/docker`.
 
 ```bash
 sh start.sh
@@ -201,12 +202,12 @@ sh start.sh
 <TabItem value="windows" label="Windows">
 Windows has no automated launch right now, but you can run it from the terminal as follows:
 
-The directory must be `/docker`.
+The directory must be `my-leemons/docker`.
 
 Firstly, we launch leemons terminating the old-unused containers in detached mode, so we can still use the terminal:
 
 ```bash
-docker compose up -d --remove-orphans --env-file ../examples/docker/.env
+docker compose --env-file ../examples/docker/.env up -d --remove-orphans
 ```
 
 Once the app is up and running, we will install the dependencies if needed (the command will decide if it is needed or not) by the command:
