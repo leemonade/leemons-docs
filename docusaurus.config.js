@@ -86,6 +86,10 @@ const config = {
                 label: 'Installation',
                 to: '/getting-started/installation',
               },
+              {
+                label: 'Docker Installation',
+                to: '/getting-started/dockerInstallation',
+              },
             ],
           },
           {
