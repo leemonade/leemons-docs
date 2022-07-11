@@ -35,7 +35,7 @@ Worker process:
 - Listens for changes in the Frontend and starts the Front service.
 - Listens for changes in the Backend and starts the Back service.
 
-In this way, the waiting time between the changes and the app update is optimized to the maximum.
+In this way, the waiting time between the changes and the app update is maximally optimized.
 
 ## App
 
@@ -80,7 +80,7 @@ set: (key, value)           => lodash.set(config, key, value)
 
 ### Backend Service
 
-The Backend service is in charge of managing the server, the application and the database. The first thing that happens is the loading of the models, once all are loaded, we proceed to initialize the [database manager](leemons-database/#database-manager) (stored in `leemons.db`), then, the schema specified in the database is created and finally the ORM model used in the installed [connector](leemons-database/#connectors) is initialized.
+The Backend service is in charge of managing the server, the application and the database. The first thing that happens is the loading of the models, once all models are loaded, we proceed to initialize the [database manager](leemons-database/#database-manager) (stored in `leemons.db`), then, the schema specified in the database is created and finally the ORM model used in the installed [connector](leemons-database/#connectors) is initialized.
 
 The entry point to the Backend is the API, which is accessible through the `https://{url}/api/{endpoint}` endpoint. Thus exposing the different [controllers](#controllers) and [services](#services).
 
@@ -128,7 +128,7 @@ const defaultModel = {
 
 Every model is stored in `leemons` on a property based on the model's origin
 
-e.g., you have a plugin called user-administration, then your models are stored under:
+e.g., you have a plugin called user-administration. then, your models are stored under:
 `leemons.plugins.user-administration.models` and your model names and collection names will be transformed to: `plugins_user-administration::OriginalName`.
 
 </details>
@@ -176,7 +176,7 @@ Plugins can be installed in two ways:
 A plugin, depending on the services it extends, must contain some folders or others. The functionalities that a plugin can add are controllers, services, models and Frontend.
 
 :::tip INFO
-All plugin code is executed in a secure environment and does not have access to the application's `process.env`, but to the one specified in the plugin's `.env`.
+All plugin codes are executed in a secure environment and do not have access to the application's `process.env`, but to the one specified in the plugin's `.env`.
 
 This file is executed by Leemons in search of a JSON
 :::
@@ -243,11 +243,11 @@ The specified models can be accessed via `leemons.plugins.{PLUGIN_NAME}.models.{
 
 Extending the Frontend is the simplest process, as it works as a small-scale React app in the Front folder (default `/frontend/`).
 
-:::danger TODO
+:::danger TO DO
 Must document the `<Public>` and `<Private>` for the frontend routes.
 :::
 
-The rest of the files create them inside the `src` folder and you can import them using `import {} from '@{PLUGIN_PLUGIN_NAME}/{PATH_D FROM_SRC}'`.
+The rest of the files are created inside the `src` folder and you can import them using `import {} from '@{PLUGIN_PLUGIN_NAME}/{PATH_D FROM_SRC}'`.
 
 ## Providers
 
@@ -255,10 +255,10 @@ Providers work like a plugin but with more limitations, their goal is to extend 
 
 Providers can be installed in two ways:
 
-- With [NPM](https://npmjs.com). They must be NPM packages whose name is `leemons-provider-{PROVIDER_NAME}`.
+- With [NPM](https://npmjs.com). They must be NPM packages named as `leemons-provider-{PROVIDER_NAME}`.
 - Create a folder inside the plugins directory with the name of the plugin.
 
-Unlike plugins a provider can only add as functionalities services and models.
+Unlike plugins a provider can only add services and models as functionalities.
 
 :::info INFO
 All the code of the providers is executed in a safe environment and does not have access to the process.env of the application, but to the one specified in the .env of the provider.
