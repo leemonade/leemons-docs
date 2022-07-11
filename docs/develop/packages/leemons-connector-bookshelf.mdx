@@ -19,16 +19,16 @@ When the connector is initialized, it connects leemons with each of the specifie
 
 - But how does it work?
 
-  Well, the first thing to do is to initialize a knex object with the database connection data, once everything is ready, we proceed to create the schema from the models provided. During the creation of the schema, the relationships between tables are created and the bookshelf models are instantiated to manage the queries.
+  Well, the first thing to do is to initialize a knex object with the database connection data, once everything is ready, we proceed in creating the schema from the models provided. During the creation of the schema, the relationships between tables are created and the bookshelf models are instantiated to manage the queries.
 
 ## Models Generation
 
-To generate the database, the first thing to do is to check the current database schema, which we do as follows:
+To generate the database, the first thing to do is to check the current database schema, which we do in the following order:
 
 1. The [user-defined models](leemons/#models) are obtained.
-2. A transaction is started to keep an open thread and to be able to return to the previous state in case of failure.
+2. A transaction is started to keep an open thread and to enable a return to the previous state in case of failure.
 3. For each model defined, a check is made to see if a corresponding table exists in the database.
-4. It is checked if the model has been altered since the previous execution, which is stored in the `core_store`.
+4. A check is performed to confirm if the model has been altered since the previous execution, which is stored in the `core_store`.
 5. The tables that need it are created or modified (based on points 2 and 3).
 6. The [bookshelf model](https://bookshelfjs.org/api.html#Bookshelf-instance-model) is generated.
 7. The foreign keys are created.
@@ -37,7 +37,7 @@ To generate the database, the first thing to do is to check the current database
 
 The models are used to define the structure of your tables, for this it is necessary to [define them](leemons/#models) as indicated in the leemons documentation.
 
-Next, you must define the different columns that your table is going to have, this is done in the `attributes` property being able to choose one of the defined [data types](#datatypes) or set a [specific type](#specific-datatypes), next to these, we can specify some [options per data](#options). Instead of a data, you can define a relationship with another table, this is achieved by the [relationship declaration](#relationship-relationship-between-tables).
+Next, it is necessary to define the different columns that your table is going to have, this is done in the `attributes` property being able to choose one of the defined [data types](#datatypes) or set a [specific type](#specific-datatypes), next to these, we can specify some [options per data](#options). Instead of data, you can define a relationship with another table, this is achieved by the [relationship declaration](#relationship-relationship-between-tables).
 
 For example: In the users table we have the fields: first name, last name and course.
 
@@ -60,7 +60,7 @@ For example: In the users table we have the fields: first name, last name and co
 
 ### Data types {#datatypes}
 
-We have selected most of the data types provided by Knex.js, trying to get the most efficient data types to be used, these are the following:
+We have selected most of the data types provided by Knex.js, in an attempt to get the most efficient data types to be used, these are the following:
 
 <details>
 <summary>string</summary>
@@ -183,7 +183,7 @@ You can also use larger numbers (they have a much higher limit).
 
 [float](https://knexjs.org/guide/schema-builder.html#float)
 
-Allows to declare a float with a precision and a scale.
+Allows the declaration of a float with a precision and a scale.
 
 ```json
 {
@@ -203,7 +203,7 @@ Allows to declare a float with a precision and a scale.
 
 [decimal](https://knexjs.org/guide/schema-builder.html#decimal)
 
-Allows to declare a decimal number with a precision and a scale.
+Allows the declaration of a decimal number with a precision and a scale.
 
 ```json
 {
@@ -304,7 +304,7 @@ Indicates whether the column should have a unique value throughout the table.
 
 [defaultTo](https://knexjs.org/guide/schema-builder.html#defaultto)
 
-Indicates the default value in case no value is specified in the insertion.
+Indicates the default value in the case that no value is specified in the insertion.
 
 ```json
 {
@@ -375,11 +375,11 @@ Specifies whether the field can (true) or cannot be null (false) (default is can
 
 ### Specific data types {#specific-datatypes}
 
-If you prefer to use a non-provided data type, you can also use a more specific one by using the `specificType` property following [Knex.js instructions](https://knexjs.org/guide/schema-builder.html#specifictype)
+If you prefer to use a non-provided data type, it is possible to use a more specific one by using the `specificType` property following [Knex.js instructions](https://knexjs.org/guide/schema-builder.html#specifictype)
 
 ### Relationships between tables
 
-In certain occasions you will need to relate several tables, we have made it as easy as possible without losing the original essence, for it, instead of defining a type in an attribute of the table, you define a reference:
+In certain occasions it will be necessary to relate several tables, we have made it as easy as possible without losing the original essence. Instead of defining a type in an attribute of the table, you define a reference:
 
 Let's see how you would define a relationship between the users and roles table.
 
@@ -398,7 +398,7 @@ Let's see how you would define a relationship between the users and roles table.
 
 #### Relationships
 
-Relationships between tables are a very important feature in SQL databases, they allow you to create relationships between data avoiding redundancy as much as possible.
+Relationships between tables are a very important feature in SQL databases, they allow the creation of relationships between data avoiding redundancy as much as possible.
 
 If you have already worked with SQL you will already know the different relationships. Here are the different relationships and how to establish them:
 
@@ -461,7 +461,7 @@ On the back end a field is being created in the students table called "class" (a
 
 Finally, you may have situations where **several data** in table A are related to **several data** in table B. In this case, a third table is needed to store the relationships.
 
-For example: A student can be enrolled in several subjects, and in turn, a subject can be given by several students, in this case it is irrelevant who declares the relationship, but as always, we recommend to create as many relationships as possible in the same model.
+For example: A user can be enrolled in several subjects, and in turn, a subject can be given by several users, in this case it is irrelevant who declares the relationship, but as always, we recommend creating as many relationships as possible in the same model.
 
 ```json
 {
@@ -485,10 +485,10 @@ Inside a table is created that contains a foreign key to the other two tables, t
 </details>
 
 :::tip TIP
-When deciding who should define the relationship, always take the following guideline:
+When deciding who should define the relationship, always follow these guidelines:
 
 - The second table you mention usually declares the relationship (a locker belongs to a single student).
-- Should always choose to have as many relationships as possible in the same table, so it is advisable to start declaring the relationships in the order: `one-to-many`, `one-to-one` and finally `many-to-many`.
-- The `one-to-many` are usually declared in the many table and not in the one table (many students in a class, one class many students. Always in the students table).
+- You should always choose to have as many relationships as possible in the same table, so it is advisable to start declaring the relationships in order of: `one-to-many`, `one-to-one` and finally `many-to-many`.
+- The `one-to-many` are usually declared in the 'many' table and not in the 'one' table (many students in a class, one class many students. Always in the students table).
 
 :::
