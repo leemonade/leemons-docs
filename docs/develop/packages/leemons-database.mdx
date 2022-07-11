@@ -8,9 +8,9 @@ import TabItem from '@theme/TabItem';
 
 # Database package
 
-leemons-database is a package for standardizing the database-related stuff.
+leemons-database is a package for standardizing database-related stuff.
 
-It manages all the connections, queries, models and connects with each connector.
+It manages all connections, queries, models and connects with each connector.
 
 ## Connectors
 
@@ -163,7 +163,7 @@ The queries are the primary way of interacting with the database. These are stan
 The provided queries may change depending on the connector, see your connector's docs, but should be as follows:
 
 :::tip \*Many queries
-The \*many queries run in transactions, so if an entry fails, the whole query rollbacks (returns to the previous state)
+The \*many queries run in transactions, so if an entry fails, the whole query rolls back (returns to the previous state)
 :::
 
 <details>
@@ -207,7 +207,7 @@ leemons.query('users').createMany([
 
 For updating an item, you need to provide a [filter](#filters) for matching the entry, then describe the new item values.
 
-When the entry is updated, an object with the new values is resolved. If no entry matches the query or an error occurred, the promise rejects.
+When the entry is updated, an object with the new values is resolved. If no entry matches the query or an error occurred, the promise rejects the database error.
 
 ```js
 leemons.query('users').update({ id: 1 }, { name: 'Janie' });
@@ -224,7 +224,7 @@ For updating multiple items, you need to provide an array with each update infor
 - [filters](#filters) so we can update the matching entry.
 - The new item values.
 
-The update runs inside a transaction. When all the entries are updated, an array with the new values is resolved. If an error occurs, the promise rejects.
+The update runs inside a transaction. When all the entries are updated, an array with the new values is resolved. If an error occurs, the promise rejects the database error.
 
 ```js
 leemons.query('users').updateMany([
@@ -263,7 +263,7 @@ leemons.query('users').set(
 
   Deleting an entry is as easy as providing the necessary [filters](#filters) for matching an entry.
 
-  Once the entry is deleted, an empty object resolves. If an error occurs, the promise rejects.
+  Once the entry is deleted, an empty object resolves. If an error occurs, the promise rejects the database error.
 
 ```js
 leemons.query('users').delete({ id: 1 });
@@ -277,7 +277,7 @@ leemons.query('users').delete({ id: 1 });
 
 You can also delete many items matching some [filters](#filters). This query is separated from `delete` to avoid unwanted data loss.
 
-The query runs inside a transaction. When all the items are deleted, an array with empty objects is resolved. If any error occurs, the promise rejects.
+The query runs inside a transaction. When all the items are deleted, an array with empty objects is resolved. If any error occurs, the promise rejects the database error.
 
 ```js
 leemons.query('users').deleteMany({ name: 'Jane' });
@@ -293,7 +293,7 @@ When you need to get data from the database, you only have to run a find query; 
 
 When some results are found, an array with them is resolved. If there are no matching results, an empty array is returned.
 
-If an error occurs, the promise throws the error.
+If an error occurs, the promise rejects the error.
 
 ```js
 leemons.query('users').find({ name: 'Jane' });
@@ -502,7 +502,7 @@ leemons.query('users').find({ name_$ncontains: 'a' });
 
 `containss`
 
-Search entries containing the text case sensitive.
+Search entries containing the case sensitive text.
 
 Specify the column name ending with the suffix `_$containss`.
 
