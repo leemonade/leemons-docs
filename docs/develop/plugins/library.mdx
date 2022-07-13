@@ -60,13 +60,13 @@ When registering a file, the plugin tries to extract the following information t
 
 When you want to have more control over a file, Library has the `Asset` entity.
 
-By default, resources in Library are of type [Media Files](#media-files) .
+By default, resources in Library are a type of [Media Files](#media-files) .
 
-The idea in Library is that all entities that need to have similar characteristics, refer to a resource of type [Media Files](#media-files).
+The idea of the Library is that all entities that need to have similar characteristics, refer to a resource of type [Media Files](#media-files).
 
 ## Asset Categories
 
-All resources stored in Library must belong to a category.
+All resources stored in the Library must belong to a category.
 
 All categories must have a unique identifier, which must be public, and which will be used for searching or browsing, called a `key` in the data model.
 
@@ -134,7 +134,7 @@ Library uses the [Version control](..) plugin to manage its `Assets` IDs.
 Category key: `bookmarks`
 :::
 
-Es la categoría especial para almacenar URLs externas dentro de Library.
+It is the special catagory for storing external URLs within the Library.
 
 `Assets` in this category type also make use of [Media Files](#media-files) category to store common data.
 
@@ -285,7 +285,7 @@ const myAsset = await assetService.add(
 
 ### Create a category {#create-category}
 
-If a plugin wants to register a category within Library to manage its resources, it can do so with the `add` method of the `categories` service.
+If a plugin wants to register a category within Library to manage its resources, it can be done with the `add` method of the `categories` service.
 
 ```js
 await leemons.getPlugin('leebrary').services.categories.add(myCategoryData);
