@@ -103,7 +103,7 @@ await leemons.getPlugin('multilanguage').services.locales.getProvider().get('es-
 
 ### Retrieve multiple languages
 
-Return an array of the specified languages if they exist. If any do not exist, they will not be in the returned array.
+Returns an array of the specified languages if they exist. If any do not exist, they will not be in the returned array.
 
 ```js
 await leemons.getPlugin('multilanguage').services.locales.getProvider().getMany(['es-ES', 'en']);
@@ -135,7 +135,7 @@ await leemons.getPlugin('multilanguage').services.common.getProvider();
 ```
 
 :::caution ATTENTION
-From now on the keys have to follow the following format:
+From now on, the keys have to follow the following format:
 
 `plugins.(name-of-your-plugin).(key-that-you-want-to-specify)`
 
@@ -147,8 +147,7 @@ If your plugin package is "leemons-plugin-users" and you want to set the "settin
 :::
 
 :::caution CAUTION
-All values must be stored as a _string_ if passed as a value anything other than a _string_ will
-is not a _string_ will give an error.
+All values must be stored as a _string_, if it passed as a value anything other than a _string_ will throw an error.
 :::
 
 ### Add translation
@@ -169,7 +168,7 @@ await leemons.getPlugin('multilanguage').services.contents.getProvider().add(key
 
 ### Add multiples translations to the same key
 
-Same as `.add`, but to store multiples translations to the same key in one call.
+Same as `.add`, but to store multiple translations to the same key in one call.
 
 ```js
 await leemons
@@ -254,7 +253,7 @@ await leemons
 
 ### Edit in bulk
 
-Edits for many languages many keys with their translations.
+Edit many languages and many keys with their translations.
 
 ```js
 await leemons
@@ -371,7 +370,7 @@ await leemons.getPlugin('multilanguage').services.contents.getProvider().get(key
 
 ### Retrieve translations by key
 
-Given a key, return all translations in all available languages.
+Given a key, returns all translations in all available languages.
 
 ```js
 await leemons
@@ -420,7 +419,7 @@ await leemons
 
 ### Retrieve translations by language
 
-Return all translations given a language.
+Returns all translations given a language.
 
 ```js
 await leemons
