@@ -441,7 +441,7 @@ await leemons
 
 ### Transform final schema into schema and translation
 
-It is passed a schema from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and returns two objects, one the schema to be compiled with [squirrelly.js](https://squirrelly.js.org/) and another with the texts to be stored as translations.
+This function must receive a schema from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and returns two objects; one of the objects needs to be compiled with [squirrelly.js](https://squirrelly.js.org/) and the other object is to store texts as translations.
 
 ```js
 await leemons.getPlugin('dataset').services.dataset.transformJsonSchema(jsonSchema);
@@ -456,7 +456,7 @@ await leemons.getPlugin('dataset').services.dataset.transformJsonSchema(jsonSche
 
 ### Transform final schema ui into ui and translation
 
-Pass a ui from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and return two objects one the ui to compile with [squirrelly.js](https://squirrelly.js.org/) and another with the texts to store them as translation.
+This function must receive a ui schema from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and returns two objects; one of the ui needs to be compiled with [squirrelly.js](https://squirrelly.js.org/) and the other is to store texts as translations.
 
 ```js
 await leemons.getPlugin('dataset').services.dataset.transformUiSchema(jsonSchema);
