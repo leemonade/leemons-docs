@@ -123,7 +123,7 @@ To add a schema you must first understand that the schema must support multiple 
 
 **Let's add a basic schema/ui**
 
-For better understanding, let's assume we want to add these `schema` and `ui` in multiples languages.
+For a better understanding, let's assume we want to add these `schema` and `ui` in multiple languages.
 
 <details>
   <summary>Show wrong schemas (English hardcoded)</summary>
@@ -441,7 +441,7 @@ await leemons
 
 ### Transform final schema into schema and translation
 
-It is passed a schema from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and returns two objects, one the schema to be compiled with [squirrelly.js](https://squirrelly.js.org/) and another with the texts to be stored as translation.
+It is passed a schema from [react-jsonschema-form](https://rjsf-team.github.io/react-jsonschema-form) and returns two objects, one the schema to be compiled with [squirrelly.js](https://squirrelly.js.org/) and another with the texts to be stored as translations.
 
 ```js
 await leemons.getPlugin('dataset').services.dataset.transformJsonSchema(jsonSchema);
@@ -477,7 +477,7 @@ Stores the values of a dataset form, validating them to schema conditions.
 
 Optionally these values can be linked to whatever you want.
 
-For example, we are going to store extra data for a user and we want to link that data to that user to retrieve it later. For that we use the optional `target` parameter where we specify (in this case) the user id.
+For example, we are going to store extra data for a user and we want to link that data to that user to retrieve it later. For that, we use the optional `target` parameter where we specify (in this case) the user id.
 
 ```js
 const target = 'user-id';
@@ -501,7 +501,7 @@ await leemons.getPlugin('dataset').services.dataset.addValues(
 
 ### Update values
 
-Same as `.addValues`. Throw an error if no values is found.
+Same as `.addValues`. Throw an error if no values are found.
 
 ```js
 const target = 'user-id';
