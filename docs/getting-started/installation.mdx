@@ -16,7 +16,7 @@ Leemons is essentially a set of npm [packages](https://github.com/leemonade/leem
 
 ### Node.js
 
-All the Leemons packages are built in Javascript, so you need to install [Node.js](https://nodejs.org/en/download/) in order to compile and run it.
+All the Leemons packages are built in Javascript, so it is necessary to install [Node.js](https://nodejs.org/en/download/) in order to compile and run it.
 The version required is 16.14 or above, you can check it by running in your terminal:
 
 ```bash
@@ -27,23 +27,23 @@ You can use [nvm](https://github.com/nvm-sh/nvm) for managing multiple Node vers
 
 ### Yarn
 
-We use [Yarn](https://classic.yarnpkg.com/en/docs/install) for managing dependencies, because of the way it handle `workspaces` in monorepos.
+We use [Yarn](https://classic.yarnpkg.com/en/docs/install) for managing dependencies, because of the way it handles `workspaces` in monorepos.
 
-Once you have [npm](#nodejs) installed you can run the following to install Yarn:
+Once [npm](#nodejs) is installed the following can be run to install Yarn:
 
 ```bash
 npm install --global yarn
 ```
 
 :::note PRIVILEGES
-Depending on your system, you may need to run this command with `sudo`.
+Depending on your system, it may be necessary to run this command with `sudo`.
 :::
 
 ### Python
 
 Although Leemons is developed entirely in Javascript, some dependency libraries need to be compiled with [Python](https://www.python.org/downloads/).
 
-You can check if you have Python installed by running in your terminal:
+It is possible to check if you have Python installed by running in your terminal:
 
 ```bash
 python --version
@@ -51,7 +51,7 @@ python --version
 
 ## 2. Database
 
-Leemons will be prepared to support both SQL and NoSQL databases, but in the beta version we support only a SQL database.
+Leemons will be prepared to support both SQL and NoSQL databases, but in the beta version only a SQL database is supported.
 Follow the installation process for your preferred database:
 
 - MySQL [macOS](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/macos-installation.html) | [Windows](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/windows-installation.html) | [Linux](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/linux-installation.html)
@@ -117,7 +117,7 @@ flush privileges;
 <Tabs>
 <TabItem value="direct" label="Direct" default>
 
-You can download the latest version of Leemons directly from Github.
+The latest version of Leemons can be run directly from Github.
 
 <Box style={{ marginBottom: 40 }}>
   <Button
@@ -157,7 +157,7 @@ git clone https://github.com/leemonade/leemons.git .
 
 ### Project structure {#project-structure}
 
-Assuming you have already downloaded or cloned Leemons to a directory named `my-leemons`, you will see the following minimal structure (we hide some folders and files for display purposes):
+Assuming Leemons has already been downloaded or cloned to a directory named `my-leemons`, you will see the following minimal structure (we hide some folders and files for display purposes):
 
 ```bash
 my-leemons
@@ -189,7 +189,7 @@ my-leemons
 
 ### Project structure rundown {#project-structure-rundown}
 
-- `/examples/` - Contains the applications examples.
+- `/examples/` - Contains the application examples.
   - `/examples/demo/` - Contains the demo application we will use in this documentation.
 - `/packages/` - Contains all the [plugins](../category/plugins) and [packages](../category/packages) of Leemons.
 
@@ -224,14 +224,14 @@ Set `database`, `username`, `password`, `host` and `port` to the values you [con
 
 ## 5. Bulk data creation template configuration
 
-While we finish developing our Welcome Wizard, Leemons allows you to install the platform thanks to our "Bulk Templates".
+While the development of our Welcome Wizard is being finished, Leemons allows the ability to install the platform thanks to our "Bulk Templates".
 
-These templates allow you to choose between three different programmes according to your needs and can be customized at a later stage.
+These templates allow the choice between three different programmes according to your needs and can be customized at a later stage.
 
 :::caution Download the template and see the tutorial
 The easiest way to understand how our template works is to watch this short video tutorial.
 
-When open the Google spreadsheet file, please, create a copy first if you want to edit.
+When opening the Google spreadsheet file, please, create a copy first if you want to edit.
 
 To download the excell file, please go to File > Download > Microsoft Excell (.xlsx)
 
@@ -259,7 +259,7 @@ We only recommend this if you are an experienced developer.
 
 ### Template file
 
-Once you have downloaded and completed the template file, rename it to `data.xlsx` and copy it to the folder:
+Once the template file has been downloaded and completed, rename it to `data.xlsx` and copy it to the folder:
 
 `my-leemons/packages/leemons-plugin-bulk-templates/src/bulk/data.xlsx`
 
@@ -273,7 +273,7 @@ my-leemons
 ```
 
 :::caution IMPORTANT
-In case you have not set up an external storage provider, check that the following folder exists:
+In the case that an external storage provider has not been set up, check that the following folder exists:
 
 `my-leemons/packages/leemons-plugin-leebrary/files`
 
@@ -318,7 +318,7 @@ The main URL of your Leemons application is `http://localhost:8080/`.
 
 In order to check if everything has gone well, kill or close the current terminal and re-launch the application by running again `yarn dev`
 
-If everything has gone well, this time you will see the following message:
+If everything has gone well, this time it will be possible to see the following message:
 
 ```bash
 Listening on http://localhost:8080
