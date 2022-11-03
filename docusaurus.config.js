@@ -121,6 +121,7 @@ const config = {
         ],
       },
       prism: {
+        additionalLanguages: ['powershell'],
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
