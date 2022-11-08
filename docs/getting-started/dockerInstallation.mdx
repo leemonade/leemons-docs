@@ -13,7 +13,7 @@ import leemonsInstallBash from "!!raw-loader!../../static/files/docker/leemons.s
 
 # Docker Installation
 
-Leemons can be installed as a containerized app. This is useful for automatizing processes and avoiding the need for installing all the required dependencies on your system.
+Leemons can be installed as a containerized app. This is useful for automatizing processes and avoiding the need of installing all the required dependencies on your system.
 
 ## 1. Requirements
 
@@ -21,18 +21,22 @@ Leemons can be installed as a containerized app. This is useful for automatizing
 
 [Docker](https://www.docker.com/) makes it possible to deploy all the necessary parts for leemons to work, making it fast, easy, and predictable. We use the [docker-compose](https://docs.docker.com/compose/) tool for managing the multi-container deployment, so there is less work to do and Leemons can be enjoyed even quicker!
 
-You can install Docker and Docker Compose through [their website](https://docs.docker.com/compose/install/).
+You can install Docker and Docker Compose through [the docker website](https://docs.docker.com/compose/install/).
 
 ## 2. Download
 
+First of all you need to download leemons on your computer or sever, don't worry, this one is the easier step :D.
+
 <Tabs>
-
-
   <TabItem value="windows" label="Windows">
 
-  Using leemons-docker in windows is as easy as run a PowerShell script, this script will generate all the needed files, if they are already downloaded, it will directly run leemons.
+  Using leemons-docker in windows is as easy as run a PowerShell script, this script will generate all the needed files.
 
   Download the file ahead to your desired directory (keep in mind it will generate files).
+
+:::tip Download name and directory
+  We recommend downloading in: `/my-docker-leemons/leemons.ps1`
+:::
 
   [Download leemons.ps1](/files/docker/leemons.ps1)
   <details>
@@ -40,14 +44,23 @@ You can install Docker and Docker Compose through [their website](https://docs.d
   <CodeBlock language="powershell" title="leemons.ps1" showLineNumbers >{leemonsInstallWindows}</CodeBlock>
   </details>
 
-  Once downloaded, it's as easy as right click the downloaded file and run it with powershell.
+  Now you only need to run the file, this can differ based on your windows version:
+
+  - **Windows10**: Right click the file and select `open with powershell`
+  - **Windows11**: Right click the file and select `run with powershell`
+
 
   </TabItem>
+
   <TabItem value="linux" label="Linux and Mac">
 
-  Using leemons-docker is as easy as run a bash script, this script will generate all the needed files, if they are already downloaded, it will directly run leemons.
+  Using leemons-docker is as easy as running a bash script, this script will generate all the needed files, if they are already downloaded, it will directly run leemons.
 
-  Download the file ahead to your desired directory (keep in mid it will generate files).
+  Download the file ahead to your desired directory (keep in mind it will generate files).
+
+:::tip Download name and directory
+  We recommend downloading in: `/my-docker-leemons/leemons.ps1`
+:::
 
   [Download leemons.sh](/files/docker/leemons.sh)
   <details>
@@ -55,9 +68,25 @@ You can install Docker and Docker Compose through [their website](https://docs.d
   <CodeBlock language="bash" title="leemons.sh" showLineNumbers >{leemonsInstallBash}</CodeBlock>
   </details>
 
-  Once downloaded, it's as easy as run the downloaded script.
+  Now you only need to run the file, this can differ based on your operating system:
+
+  1. Firstly, you need to open the terminal.
+  2. Now navigate to your desired folder: `cd /my-docker-leemons`
+  3. Check that the file exists: `ls leemons.sh`, it should print the file name, otherwise, review the path
+  4. Finally, run the script with `sh leemons.sh`
+
+:::tip
+Some operating systems let you drag and drop the folder to your terminal to paste the path, you can type `cd` and drag and drop it to complete the command.
+:::
+
   </TabItem>
 </Tabs>
+
+Once running, it will start downloading some files and docker stuff (it may take a few minutes), once ready, you should see something like this:
+
+![Leemons backend server being initialized when printing 'Listening on http://localhost:8080'](/img/docker/serverReady.png)
+
+When the server is ready, open a new tab in your browser, and navigate to [http://localhost:8080](http://localhost:8080)
 
 ## 3. Bulk data creation template configuration
 
@@ -65,10 +94,25 @@ You can install Docker and Docker Compose through [their website](https://docs.d
 Currently the bulk templates are not yet supported for docker
 :::
 
-## 4. Database
+## 4. Initial configuration
+
+The first run you will need to set up some things, follow the steps and enter your information.
+
+Once you get to the email provider, we recommend using a *free smtp server*, or if you have one, go and try it.
+
+:::tip
+We recommend using [this free smtp server](https://www.wpoven.com/tools/free-smtp-server-for-testing), we have tried it and works like a charm.
+:::
+
+## 5. Database
 
 Leemons docker uses a MySQL server internally, which is configured through the .env file in your directory
 
-## 5. Test your Leemons 👩‍💻
+## 6. Reset the installation
 
-Once the frontend server is running, test your Leemons application by opening the main URL [http://localhost:8080](http://localhost:8080) in your browser.
+In order to reset your Leemons installation, you need to clean your docker images, this can be done with the following command inside your `my-docker-leemons` directory:
+
+```bash
+docker-compose down;
+docker rmi --force $(docker images leemonade/leemons -q);
+```
