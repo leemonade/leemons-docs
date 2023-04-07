@@ -1,4 +1,5 @@
 .docusaurus
 .vscode
+.enhancedocs
 build
 node_modules
