@@ -306,6 +306,8 @@ const myCategoryData = {
   key: 'my-awesome-category',
   creatable: true,
   createUrl: '/private/my-plugin/create',
+
+  // Used to perform searchs. Set as 'leebrary' to search only in assets fields
   provider: 'leebrary',
 
   // Menu properties
@@ -328,8 +330,12 @@ const myCategoryData = {
 
   // Frontend config
   // Paths must be realtive to plugin's frontend "src/widgets/leebrary"
-  listCardComponent: 'path/to/my/card-component',
-  detailComponent: 'path/to/my/detail-component',
+	listCardComponent: 'path/to/my/card-component',
+	detailComponent: 'path/to/my/detail-component',
+	
+	// Used to compose the path on dynamicImport of Card components. Eg:
+	// import(`@leemons/plugins/${componentOwner.split('.')[1]}/src/widgets/leebrary/${listCardComponent}.js`)
+  componentOwner: 'plugins.my-plugin', // should begin with "plugins" or "providers" as appropriate.
 };
 ```
 
