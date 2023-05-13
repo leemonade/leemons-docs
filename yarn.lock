@@ -2892,13 +2892,6 @@ axios@^0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^0.26.0:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
-  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
-  dependencies:
-    follow-redirects "^1.14.8"
-
 babel-loader@^8.2.5:
   version "8.2.5"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.2.5.tgz#d45f585e654d5a5d90f5350a779d7647c5ed512e"
@@ -4106,14 +4099,13 @@ enhanced-resolve@^5.9.3:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
 
-enhancedocs-search@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/enhancedocs-search/-/enhancedocs-search-0.1.4.tgz#3dbb3a50d08717e720cabd937a249b27c7421f73"
-  integrity sha512-knTTGmKWFDlHDPp63j8zB4TPKAOPNiXelN18o+qe8tqyFpLKr/NIvmA+DtFVPo+QHyNuZgmUqhHh3jzqgL1bhA==
+enhancedocs-search@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/enhancedocs-search/-/enhancedocs-search-0.2.1.tgz#d1b7cdbe0bc32ae6ab6f40d8646bc2f708e67e08"
+  integrity sha512-7axoO7gTbj8T+i8udHPFrv+Q/P7T/9rtJwcqLBOWOQ1pp9eH1Djt4zqTAkWxtUBFYV9CxA21NxBggbSeZpr+bw==
   dependencies:
     react-markdown "^8.0.6"
     react-modal "^3.16.1"
-    typesense "^1.5.3"
 
 entities@^2.0.0:
   version "2.2.0"
@@ -4457,11 +4449,6 @@ follow-redirects@^1.0.0, follow-redirects@^1.14.7:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.1.tgz#0ca6a452306c9b276e4d3127483e29575e207ad5"
   integrity sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==
-
-follow-redirects@^1.14.8:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
-  integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
 
 fork-ts-checker-webpack-plugin@^6.5.0:
   version "6.5.2"
@@ -5530,11 +5517,6 @@ lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
-
-loglevel@^1.8.0:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.8.1.tgz#5c621f83d5b48c54ae93b6156353f555963377b4"
-  integrity sha512-tCRIJM51SHjAayKwC+QAg8hT8vg6z7GSgLJKGvzuPb1Wc+hLzqtuVLxp6/HzSPOozuK+8ErAhy7U/sVzw8Dgfg==
 
 loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
@@ -8222,14 +8204,6 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
-
-typesense@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/typesense/-/typesense-1.5.3.tgz#85aa8fcd6904ca5532bde5df0e83a38621de2026"
-  integrity sha512-eLHBP6AHex04tT+q/a7Uc+dFjIuoKTRpvlsNJwVTyedh4n0qnJxbfoLJBCxzhhZn5eITjEK0oWvVZ5byc3E+Ww==
-  dependencies:
-    axios "^0.26.0"
-    loglevel "^1.8.0"
 
 ua-parser-js@^0.7.30:
   version "0.7.31"
