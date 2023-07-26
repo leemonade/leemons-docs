@@ -195,6 +195,7 @@ my-leemons
 
 ## 4. Database connection configuration
 
+Currently, Leemons needs a SQL and a Mongo connection at the same time.
 You can set the configuration of the database connection by modifying the file:
 
 ```js title="my-leemons/examples/demo/config/database.js"
@@ -216,6 +217,22 @@ module.exports = {
       },
     },
   },
+  mongo: {
+    connector: 'mongoose',
+    settings: {
+      database: 'leemons',
+      authDatabase: 'admin',
+      username: 'leemons',
+      password: 'leemons',
+      port: 27017,
+      host: 'localhost',
+      srv: false,
+      pool: {
+        min: 5,
+        max:  1000
+      }
+    }
+  }
   defaultConnection: 'mysql',
 };
 ```
