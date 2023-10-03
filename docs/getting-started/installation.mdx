@@ -216,23 +216,23 @@ module.exports = {
         },
       },
     },
-  },
-  mongo: {
-    connector: 'mongoose',
-    settings: {
-      database: 'leemons',
-      authDatabase: 'admin',
-      username: 'leemons',
-      password: 'leemons',
-      port: 27017,
-      host: 'localhost',
-      srv: false,
-      pool: {
-        min: 5,
-        max:  1000
+    mongo: {
+      connector: 'mongoose',
+      settings: {
+        database: 'leemons',
+        authDatabase: 'admin',
+        username: 'leemons',
+        password: 'leemons',
+        port: 27017,
+        host: 'localhost',
+        srv: false,
+        pool: {
+          min: 5,
+          max:  1000
+        }
       }
-    }
-  }
+    },
+  },
   defaultConnection: 'mysql',
 };
 ```
